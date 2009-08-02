@@ -13,6 +13,33 @@ or
 
 Replace `<doc-id>`, `<spreadsheet-id>`, and `<worksheet-id>` with the ID of the document or worksheet that you wish to embed. The ID’s are available at the plugin’s configuration page. Don't forget to enclose them in quotes.
 
-For example, the following shortcode:
-http://img188.imageshack.us/i/posttextarea.png/
-_Insert the shortcode where you want your document to be_
+For example, the following shortcode:<br/>
+http://img188.imageshack.us/img188/2062/posttextarea.png<br/>
+
+results in the following:<br/>
+http://img40.imageshack.us/img40/9343/sampledoc.png<br/>
+
+=Post Helper=
+As of v0.5, you may embed a document or spreadsheet by simply clicking on its link in the Google Documents/Spreadsheets panel at the bottom of the page. This may be the preferred method as it relieves you of the technical task of typing the shortcode. Just place your caret where you want your document to appear and click on the title of your chosen document in the panel. This works in both Visual and HTML modes.
+
+http://img188.imageshack.us/img188/339/postbox.png<br/>
+
+If the list of documents and spreadsheets shown in the panel is outdated, just click on the refresh button located at the top left-hand corner of the panel and an updated list will be retrieved immediately.
+
+_Javascript needs to be enabled for this to work._
+
+=Column Headings=
+
+v0.5 also introduced 2 optional attributes for spreadsheets, namely `headings` and `style` (`style` will be described in detail in a later section.) Due to technical reasons, all the column headings retrieved from Google Spreadsheets have their spaces removed and characters converted to the lowercase. Furthermore, if a column heading is left blank on the Google Spreadsheet, the Google API will replace it with a random string of characters.
+
+http://img25.imageshack.us/img25/9594/badheadings.png
+
+As a workaround, the user may supply the plugin with a string of comma-separated headings that will be displayed in place of the headings retrieved from Google Spreadsheets. The replacement works from left to right i.e. if you provide only one heading and the spreadsheet has 3 columns, the heading of the leftmost column will be replaced.
+
+For example, the following:
+
+	{{{[gdocs st_id='...' wt_id='...' type='spreadsheet' headings='N, N Power, Multiply']}}}
+
+results in:
+
+http://img156.imageshack.us/img156/2109/goodheadings.png
