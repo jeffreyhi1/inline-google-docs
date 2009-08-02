@@ -1,0 +1,31 @@
+table.ver-zebra {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+}
+
+table.ver-zebra th {
+	font-size: 14px;
+	font-weight: normal;
+	padding: 12px 15px;
+	border-right: 1px solid #fff;
+	border-left: 1px solid #fff;
+	color: #039;
+}
+
+table.ver-zebra td {
+	padding: 8px 15px;
+	border-right: 1px solid #fff;
+	border-left: 1px solid #fff;
+	color: #669;
+}
+
+table.ver-zebra td.odd {
+	background: #eff2ff;
+}
+
+table.ver-zebra td.even {
+	background: #e8edff;
+}
