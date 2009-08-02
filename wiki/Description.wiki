@@ -1,5 +1,8 @@
 #summary General description and instructions
 #labels Featured,Phase-Support
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2" />
 
 = Shortcode =
 After you have installed the plugin, go to the *Write Page* or *Write Post* form on your Wordpress blog and type the following where you want your document to appear:
