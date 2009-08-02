@@ -20,7 +20,7 @@ results in the following:<br/>
 http://img40.imageshack.us/img40/9343/sampledoc.png
 
 = Post Helper =
-As of v0.5, you may embed a document or spreadsheet by simply clicking on its link in the Google Documents/Spreadsheets panel at the bottom of the page. This may be the preferred method as it relieves you of the technical task of typing the shortcode. Just place your caret where you want your document to appear and click on the title of your chosen document in the panel. This works in both Visual and HTML modes.
+As of v0.5, you may embed a document or spreadsheet by simply clicking on its link in the *Google Documents/Spreadsheets* panel at the bottom of the page. This may be the preferred method as it relieves you of the technical task of typing the shortcode. Just place your caret where you want your document to appear and click on the title of your chosen document in the panel. This works in both Visual and HTML modes.
 
 http://img188.imageshack.us/img188/339/postbox.png
 
