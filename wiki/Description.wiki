@@ -1,0 +1,18 @@
+#summary General description and instructions
+#labels Featured
+
+= Shortcode =
+
+After you have installed the plugin, go to the *Write Page* or *Write Post* form on your Wordpress blog and type the following where you want your document to appear:
+
+{{{[gdocs id='<doc-id>' type='document']}}}
+
+or
+
+{{{[gdocs st_id='<spreadsheet-id>' wt_id='<worksheet-id>' type='spreadsheet']}}}
+
+Replace `<doc-id>`, `<spreadsheet-id>`, and `<worksheet-id>` with the ID of the document or worksheet that you wish to embed. The ID’s are available at the plugin’s configuration page. Don't forget to enclose them in quotes.
+
+For example, the following shortcode:
+http://img188.imageshack.us/i/posttextarea.png/
+_Insert the shortcode where you want your document to be_
