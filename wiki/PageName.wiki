@@ -1,5 +1,0 @@
-#summary One-sentence summary of this page.
-
- * [Description User Guide]
- * [Installation Installation]
- * [FAQ Frequently Asked Questions]
