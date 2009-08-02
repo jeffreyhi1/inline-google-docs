@@ -1,0 +1,9 @@
+#summary Installation Instructions
+#labels Phase-Support,Phase-Deploy
+ # Download and extract the plugin
+ # Upload the `inline-google-docs` folder into the `/wp-content/plugins/` directory
+ # Activate the plugin through the *Plugins* menu in WordPress
+ # Go to *Settings*, then navigate to *G Docs*
+ # Provide the plugin with your Google account login credentials
+ # Input proxy settings if you are behind a proxy, then click on *Save Changes*
+ # The plugin will display the document/spreadsheet id's for your documents and spreadsheets
