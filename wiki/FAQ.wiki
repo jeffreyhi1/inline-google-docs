@@ -1,0 +1,14 @@
+#summary Frequently Asked Questions
+#labels Phase-Support
+
+==Which PHP version does the plugin require?==
+
+PHP 5.
+
+==Does it use iframes?==
+
+No, it doesn't.
+
+==How do I create zebra patterns for my tables?==
+
+As of v0.7, all rows and columns have an additional class that marks it as even or odd. Use these to create alternating patterns.
