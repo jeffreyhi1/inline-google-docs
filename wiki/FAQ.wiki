@@ -1,5 +1,6 @@
 #summary Frequently Asked Questions
 #labels Phase-Support
+#sidebar Sidebar
 
 ==Which PHP version does the plugin require?==
 
