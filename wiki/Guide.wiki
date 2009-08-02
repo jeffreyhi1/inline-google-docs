@@ -1,5 +1,5 @@
 #summary General description and instructions
-#labels Phase-Deploy,Phase-Support,Phase-Implementation
+#labels Phase-Deploy,Phase-Support,Phase-Implementation,Featured
 #sidebar Sidebar
 
 <wiki:toc max_depth="2" />
