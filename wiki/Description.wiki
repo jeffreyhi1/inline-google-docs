@@ -59,7 +59,7 @@ All embedded worksheets are formatted as valid tables with the following structu
 
 A typical `table` element has the following attributes:
 {{{
-<table id="gdocs_<spreadsheet id>_<worksheet_id>" class="gdocs gdocs_<spreadsheet id>">
+<table id="gdocs_<spreadsheet-id>_<worksheet-id>" class="gdocs gdocs_<spreadsheet-id>">
 }}}
 
 A typical `tr` element has the following attributes:
@@ -93,7 +93,7 @@ You may also define a new style *class* and specify it using the `style` attribu
 
 For example, suppose you would like to define a new class named _my-class_ for your tables. First, create a new CSS file in `inline-google-docs/styles/` and name it _my-class.css_. Then, specify the class in your shortcode, as follows:
 {{{
-	[gdocs st_id='...' wt_id='...' type='spreadsheet' style='_my-class_']
+	[gdocs st_id='...' wt_id='...' type='spreadsheet' style='my-class']
 }}}
 
 http://img195.imageshack.us/img195/986/tablefqe.png
