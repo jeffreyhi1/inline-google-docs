@@ -1,5 +1,5 @@
 #summary Installation Instructions
-#labels Phase-Support,Phase-Deploy
+#labels Phase-Support,Phase-Deploy,Featured
 #sidebar Sidebar
  # Download and extract the plugin
  # Upload the `inline-google-docs` folder into the `/wp-content/plugins/` directory
