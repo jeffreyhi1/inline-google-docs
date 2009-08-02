@@ -1,6 +1,6 @@
 #summary General description and instructions
 #labels Featured,Phase-Support
-#sidebar TableOfContents
+#sidebar Sidebar
 
 <wiki:toc max_depth="2" />
 
