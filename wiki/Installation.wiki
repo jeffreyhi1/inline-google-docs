@@ -8,3 +8,17 @@
  # Provide the plugin with your Google account login credentials
  # Input proxy settings if you are behind a proxy, then click on *Save Changes*
  # The plugin will display the document/spreadsheet id's for your documents and spreadsheets
+
+= Important =
+
+Should you decide to checkout a copy of the plugin using SVN, make sure you correct the file permissions on your own as SVN does not preserve file permissions. I recommend the following settings (assuming FTP user as `codex` and Web user as `www-data`):
+{{{
+-rw-r----- codex www-data some-file.php
+drwxr-x--- codex www-data some-directory
+}}}
+
+As the cache and error log:
+{{{
+drwxrwx--- codex www-data cache
+-rw-rw---- codex www-data error.log.php
+}}}
