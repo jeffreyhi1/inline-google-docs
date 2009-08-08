@@ -52,7 +52,7 @@ class GDisplay {
 			width:50%;
 		}
 		div#gdocs_right td.gdocs_loader {
-			background:#cfebf7 url("<?php echo GDOCS_ADDRESS ?>/inc/ajax-loader.gif") center right no-repeat;
+			background:#cfebf7 url("<?php echo GDOCS_ADDRESS ?>/inc/img/ajax-loader.gif") center right no-repeat;
 			padding:8px 8px 8px 20px;
 		}
 		div#gdocs_right tr.gdocs_loader td{
@@ -322,15 +322,15 @@ class GDisplay {
 			}
 			
 			span.gdocs_document {
-				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/document.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/document.png") no-repeat center;
 			}
 			
 			span.gdocs_spreadsheet {
-				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/spreadsheet.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/spreadsheet.png") no-repeat center;
 			}
 		</style>
 		<div id='gdocs_helper' class='postbox open'>
-			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets</h3>			
+			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/img/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets</h3>			
 			<div class='inside'>
 				<noscript><div class='gdocs_error' id='gdocs_js_error' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("Enable Javascript to use this panel.") ?></strong></p></div></noscript>
 				<?php
@@ -354,6 +354,21 @@ class GDisplay {
 		</div>
 		<!-- End G Docs helper -->
 	<?php
+	}
+	
+	/**
+	 * Formats and prints tablesorter initialization script
+	 * @param	string	$st_id	spreadsheet id
+	 * @param	string	$wt_id	worksheet id
+	 * @param	string	$params	parameters to pass to tablesorter
+	 */
+	public static function printSortScript ($st_id, $wt_id, $params){
+		return 
+		"<script type='text/javascript' language='javascript'>
+			jQuery(document).ready(function() { 
+        		jQuery('#gdocs_{$st_id}_{$wt_id}').tablesorter({$params});
+			});
+		</script>";
 	}
 	
 	/**
@@ -474,7 +489,7 @@ class GDisplay {
 		
 		if (file_exists (GDOCS_PATH . "/styles/{$style}.css")){
 			$path = GDOCS_ADDRESS . "/styles/{$style}.css";
-		}else {
+		}else if (file_exists (GDOCS_PATH . "/styles/{$style}/{$style}.css")) {
 			$path = GDOCS_ADDRESS . "/styles/{$style}/{$style}.css";
 		}
 		

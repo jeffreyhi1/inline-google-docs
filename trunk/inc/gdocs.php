@@ -23,7 +23,7 @@
  * - email everyone who has dropped a comment, email, trackback, invite to join group
  * - redirect from blog
  * @todo
- * - new ideas (tablesorter, single cell)
+ * - new ideas (single cell etc)
  * - brainstorm, research google api
  * - presentations, files, others, forms
  * - multipage feeds
@@ -159,8 +159,14 @@ function gdocs_display_spreadsheet ($atts){
 	// check parameters exist
 	if (is_null ($atts['wt_id']) || is_null ($atts['st_id'])) return NULL;
 	
-	// print stylesheet <link>
+	// print stylesheet <link>, not cached as the style attribute is variable
 	$html = isset ($atts['style']) ? GDisplay::printStylesheet ($atts['style']) : "";
+	
+	// print tablesorter, not cached as well
+	if ($atts['sort']){
+		$params = $atts['sort'] === 'true' ? NULL : $atts['sort'];
+		$html .= GDisplay::printSortScript ($atts['st_id'], $atts['wt_id'], $params);
+	}
 	
 	// print table tag. we don't want to cache this as the style attribute is variable.
 	$html .= GDisplay::printStTblTag ($atts['st_id'], $atts['wt_id'], $atts['style']);
@@ -325,13 +331,18 @@ add_action ('edit_page_form', 'gdocs_helper');
 // add shortcode
 add_shortcode ('gdocs', 'gdocs_display');
 
-// add javascript (gdocs.js, prototype)
+// add admin javascript (gdocs.js, prototype)
 global $pagenow;
 $wp_pages = array ('post.php', 'post-new.php', 'page.php', 'page-new.php');
 if (in_array ($pagenow, $wp_pages)){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/gdocs.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
 }else if ($pagenow == 'options-general.php' && $_GET['page'] === 'gdocs.php'){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/gdocs-options.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs-options.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
+}
+
+// add post/page view javascript (tablesorter.js, jquery)
+if (!is_admin()){
+	wp_enqueue_script ('gdocs-tablesorter', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/jquery.tablesorter.js', array ('jquery'));
 }
 ######################## END Global Execution Space ##################################
 ?>
