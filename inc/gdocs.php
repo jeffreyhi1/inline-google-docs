@@ -187,13 +187,25 @@ function gdocs_display_spreadsheet ($atts){
 }
 
 /**
+ * Hook for admin initialization
+ */
+function gdocs_admin (){
+	if (function_exists ('register_setting')){
+		$options = array ("gdocs_user","gdocs_pwd","gdocs_proxy_host","gdocs_proxy_port","gdocs_proxy_user","gdocs_proxy_pwd", "gdocs_cache_expiry");
+		foreach ($options as $option){
+			register_setting ('gdocs-options', $option);
+		}
+	}
+}
+
+/**
  * Hook for options page
  */
 function gdocs_options (){
 
 	if (function_exists ('add_options_page')){
 		// add an options page that is printed by gdocs_options_setup
-		add_options_page ('Inline Google Docs', 'G Docs', 'manage_options', basename(__FILE__), 'gdocs_options_setup');
+		add_options_page ('Inline Google Docs', 'Inline Google Docs', 'manage_options', basename(__FILE__), 'gdocs_options_setup');
 		
 	} 
 
@@ -207,6 +219,12 @@ function gdocs_options_setup (){
 	// check if cache is writable
 	$x = new GCache ('x');
 	if (!$x->isWritable()) GDisplay::printCacheNotWritableError ();
+	
+	// check if error log is writable
+	$error_log = dirname(__FILE__) . '/../cache/error.log.php';
+	if (!is_writable ($error_log)){
+		GDisplay::printLogNotWritableError ();
+	}
 
 	GDisplay::printHead ();	
 	GDisplay::printLogin ();
@@ -225,7 +243,7 @@ function gdocs_options_setup (){
  */
 function gdocs_error (Exception $e){
 	$error_log = dirname(__FILE__) . '/../cache/error.log.php';
-	file_put_contents ($error_log, (String)$e, FILE_APPEND);
+	@file_put_contents ($error_log, (String)$e, FILE_APPEND);
 }
 
 /**
@@ -288,6 +306,7 @@ function gdocs_uninstall (){
 
 // add actions
 add_action ('admin_menu', 'gdocs_options');
+add_action ('admin_init', 'gdocs_admin');
 add_action ('edit_form_advanced', 'gdocs_helper');
 add_action ('edit_page_form', 'gdocs_helper');
 
