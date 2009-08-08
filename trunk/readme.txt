@@ -9,6 +9,10 @@ This plugin allows you to embed Google Document/Spreadsheet content in posts and
 
 == Description ==
 
+Many people maintain dynamic content on Google Documents or hold volatile data on Google Spreadsheets. These change when collaborators save an update or users submit a form. Occasionally, one may wish to embed the contents of one's Google Documents or Spreadsheets in a post or page to reflect the latest updates on one's blog. This plugin seeks to provide this functionality without using an `<iframe>`. In addition, it caches contents of the Google Documents or Spreadsheets to speed up page loading.
+
+_Currently, the plugin can only access published documents, but can access both private and public spreadsheets._
+
 #### Shortcode ####
 After you have installed the plugin, go to the **Write Page** or **Write Post** form on your Wordpress blog and type the following where you want your document to appear:
 
@@ -115,11 +119,31 @@ This plugin has been tested on IE 7, IE 8, Chrome, Firefox 2, Firefox 3, Firefox
 
 1. Download and extract the plugin
 1. Upload the `inline-google-docs` folder into the `/wp-content/plugins/` directory
+1. Edit file permissions through your FTP client to make the `inline-google-docs/cache/` and `inline-google-docs/cache/error.log.php` writable.
 1. Activate the plugin through the **Plugins** menu in WordPress
 1. Go to **Settings**, then navigate to **G Docs**
 1. Provide the plugin with your Google account login credentials
 1. Input proxy settings if you are behind a proxy, then click on **Save Changes**
 1. The plugin will display the document/spreadsheet id's for your documents and spreadsheets
+
+= File Permissions =
+
+Unfortunately, you need to correct the file permissions on your own as SVN automatically resets all file permissions on uploaded files. I recommend the following settings (assuming FTP user as codex and Web user as www-data):
+
+	-rw-r----- codex www-data some-file.php
+	drwxr-x--- codex www-data some-directory
+
+As for the cache and error log:
+
+	drwxrwx--- codex www-data cache
+	-rw-rw---- codex www-data error.log.php
+	
+The UNIX commands are provided below:
+
+	cd /path/to/Wordpress/wp-content/plugins/inline-google-docs;
+	find . -type d -exec chmod 750 {} \;
+	find . -type f -exec chmod 640 {} \;
+	chmod -R g+w ./cache;
 
 == Frequently Asked Questions ==
 

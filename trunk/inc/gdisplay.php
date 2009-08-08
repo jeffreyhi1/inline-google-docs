@@ -85,7 +85,17 @@ class GDisplay {
 		<h2>Inline Google Docs</h2>
 		<div id='gdocs_left'>
 			<form method='post' action='options.php'>
-				<?php wp_nonce_field ('update-options'); ?>
+				<?php
+					if (function_exists ('settings_fields')){
+						settings_fields ('gdocs-options');
+					}else {
+				?>
+				<input type="hidden" name="action" value="update" />
+				<input type="hidden" name="page_options" value="gdocs_user,gdocs_pwd,gdocs_proxy_host,gdocs_proxy_port,gdocs_proxy_user,gdocs_proxy_pwd, gdocs_cache_expiry" />
+				<?php 
+						wp_nonce_field ('update-options');	
+					}
+				?>
 			
 	<?php
 	
@@ -174,12 +184,8 @@ class GDisplay {
 	public static function printFoot (){
 	?>		
 				<p class='submit'>
-					<input type='submit' name='Submit' value="<?php _e('Save changes') ?>" />
-				</p>
-				
-				<input type="hidden" name="action" value="update" />
-				<input type="hidden" name="page_options" value="gdocs_user,gdocs_pwd,gdocs_proxy_host,gdocs_proxy_port,gdocs_proxy_user,gdocs_proxy_pwd, gdocs_cache_expiry" />
-				
+					<input type='submit' name='Submit' value="<?php _e('Save changes') ?>" class='button-primary' />
+				</p>				
 				
 			</form>
 		</div>
@@ -245,7 +251,19 @@ class GDisplay {
 		$grp = exec ("groups {$user}");
 		$grp = str_replace (' ', ', ', $grp);
 	?>
-		<div class='error' id='message' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The cache folder is not writable.<br/>Current user: <code>{$user}</code> | Groups: <code>$grp</code>") ?></strong></p></div>
+		<div class='error' id='message_100' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The cache folder is not writable.<br/>Current user: <code>{$user}</code> | Groups: <code>$grp</code>") ?></strong></p></div>
+	<?php
+	}
+	
+	/**
+	 * Prints log not writable
+	 */
+	public static function printLogNotWritableError (){
+		$user = exec ('whoami');
+		$grp = exec ("groups {$user}");
+		$grp = str_replace (' ', ', ', $grp);
+	?>
+		<div class='error' id='message_101' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The <a href='" . get_bloginfo ('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'>log file</a> is not writable.<br/>Current user: <code>{$user}</code> | Groups: <code>$grp</code>") ?></strong></p></div>
 	<?php
 	}
 	
