@@ -22,3 +22,11 @@ As for the cache and error log:
 drwxrwx--- codex www-data cache
 -rw-rw---- codex www-data error.log.php
 }}}
+
+The UNIX commands are provided below:
+{{{
+cd /path/to/Wordpress/wp-content/plugins/inline-google-docs;
+find . -type d -exec chmod 750 {} \;
+find . -type f -exec chmod 640 {} \;
+chmod -R g+w ./cache;
+}}}
