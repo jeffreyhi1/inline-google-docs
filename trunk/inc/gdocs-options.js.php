@@ -31,7 +31,7 @@ var GDocsOptions = {
 	init: function (){
 	
 		// call php script to retrieve list of documents and spreadsheets
-		new Ajax.Request ('<?php echo $url ?>/wp-content/plugins/inline-google-docs/ajax-functions.php', {
+		new Ajax.Request ('<?php echo $url ?>/ajax-functions.php', {
 			method: 'get',
 			parameters: {action: 'update_list'},
 			onSuccess: function (transport, json){
