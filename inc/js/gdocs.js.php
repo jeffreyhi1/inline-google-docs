@@ -240,10 +240,10 @@ var GDocs = {
 Ajax.Responders.register ({
 	onCreate: function (){
 		// appear
-		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/ajax-loader.gif');
+		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/img/ajax-loader.gif');
 	},
 	onComplete: function (){
 		// hide
-		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/ajax-refresh.png');
+		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/img/ajax-refresh.png');
 	}
 });
