@@ -74,12 +74,12 @@ if (isset($_GET['action'])){
 		header('X-JSON: (' . json_encode ($error) . ')');
 	} catch (Zend_Gdata_App_HttpException $e){
 		// HTTP Error
-		$error = "A HTTP error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . get_bloginfo('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
+		$error = "A HTTP error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
 		header ('HTTP/1.0 502 Bad Gateway');
 		header('X-JSON: (' . json_encode ($error) . ')');
 		gdocs_error ($e);
 	} catch (Exception $e){
-		$error = "An error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . get_bloginfo('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
+		$error = "An error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
 		header ('HTTP/1.0 400 Bad Request');
 		header('X-JSON: (' . json_encode ($error) . ')');
 		gdocs_error ($e);

@@ -53,7 +53,7 @@ class GCache {
 	 * @return	GCache
 	 */
 	public function __construct (){
-		$this->dir = ABSPATH . 'wp-content/plugins/inline-google-docs/cache/';
+		$this->dir = GDOCS_PATH . '/cache/';
 		$this->file = $this->getPath (func_get_args());
 	}
 

@@ -47,9 +47,21 @@ define ('GDOCS_DOCUMENT', 'doc');
  * @name	GDOCS_SPREADSHEET
  */
 define ('GDOCS_SPREADSHEET', 'st');
+/**
+ * Absolute path to this plugin
+ * 
+ * Plugin folder = basename (GDOCS_PATH)
+ * @name	GDOCS_PATH
+ */
+define ('GDOCS_PATH', realpath (ABSPATH . 'wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . "/.."));
+/**
+ * Web path to this plugin
+ * @name	GDOCS_ADDRESS
+ */
+define ('GDOCS_ADDRESS', get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH));
 
 // add Zend library to path
-$path = dirname (__FILE__) . "/../library";
+$path = GDOCS_PATH . "/library";
 set_include_path (get_include_path () . PATH_SEPARATOR . $path);
 
 /**
@@ -221,7 +233,7 @@ function gdocs_options_setup (){
 	if (!$x->isWritable()) GDisplay::printCacheNotWritableError ();
 	
 	// check if error log is writable
-	$error_log = dirname(__FILE__) . '/../cache/error.log.php';
+	$error_log = GDOCS_PATH . '/cache/error.log.php';
 	if (!is_writable ($error_log)){
 		GDisplay::printLogNotWritableError ();
 	}
@@ -242,7 +254,7 @@ function gdocs_options_setup (){
  * @param	Exception	$e	Exception to log to file
  */
 function gdocs_error (Exception $e){
-	$error_log = dirname(__FILE__) . '/../cache/error.log.php';
+	$error_log = GDOCS_PATH . '/cache/error.log.php';
 	@file_put_contents ($error_log, (String)$e, FILE_APPEND);
 }
 
@@ -317,9 +329,9 @@ add_shortcode ('gdocs', 'gdocs_display');
 global $pagenow;
 $wp_pages = array ('post.php', 'post-new.php', 'page.php', 'page-new.php');
 if (in_array ($pagenow, $wp_pages)){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/inline-google-docs/inc/gdocs.js.php?url=' . get_bloginfo ('url'), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/gdocs.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
 }else if ($pagenow == 'options-general.php' && $_GET['page'] === 'gdocs.php'){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/inline-google-docs/inc/gdocs-options.js.php?url=' . get_bloginfo ('url'), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/gdocs-options.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
 }
 ######################## END Global Execution Space ##################################
 ?>

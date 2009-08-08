@@ -52,7 +52,7 @@ class GDisplay {
 			width:50%;
 		}
 		div#gdocs_right td.gdocs_loader {
-			background:#cfebf7 url("<?php echo get_bloginfo ('url'); ?>/wp-content/plugins/inline-google-docs/inc/ajax-loader.gif") center right no-repeat;
+			background:#cfebf7 url("<?php echo GDOCS_ADDRESS ?>/inc/ajax-loader.gif") center right no-repeat;
 			padding:8px 8px 8px 20px;
 		}
 		div#gdocs_right tr.gdocs_loader td{
@@ -263,7 +263,7 @@ class GDisplay {
 		$grp = exec ("groups {$user}");
 		$grp = str_replace (' ', ', ', $grp);
 	?>
-		<div class='error' id='message_101' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The <a href='" . get_bloginfo ('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'>log file</a> is not writable.<br/>Current user: <code>{$user}</code> | Groups: <code>$grp</code>") ?></strong></p></div>
+		<div class='error' id='message_101' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'>log file</a> is not writable.<br/>Current user: <code>{$user}</code> | Groups: <code>$grp</code>") ?></strong></p></div>
 	<?php
 	}
 	
@@ -322,15 +322,15 @@ class GDisplay {
 			}
 			
 			span.gdocs_document {
-				background:transparent url("<?php echo get_bloginfo ('url') ?>/wp-content/plugins/inline-google-docs/inc/document.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/document.png") no-repeat center;
 			}
 			
 			span.gdocs_spreadsheet {
-				background:transparent url("<?php echo get_bloginfo ('url') ?>/wp-content/plugins/inline-google-docs/inc/spreadsheet.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/spreadsheet.png") no-repeat center;
 			}
 		</style>
 		<div id='gdocs_helper' class='postbox open'>
-			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo get_bloginfo ('url') . "/wp-content/plugins/inline-google-docs/inc/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets</h3>			
+			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets</h3>			
 			<div class='inside'>
 				<noscript><div class='gdocs_error' id='gdocs_js_error' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("Enable Javascript to use this panel.") ?></strong></p></div></noscript>
 				<?php
@@ -472,10 +472,10 @@ class GDisplay {
 		if (in_array ($style, self::$stylesheets)) return NULL;
 		self::$stylesheets[] = $style;
 		
-		if (file_exists (dirname(__FILE__) . "/../styles/{$style}.css")){
-			$path = get_bloginfo ('url') . "/wp-content/plugins/inline-google-docs/styles/{$style}.css";
+		if (file_exists (GDOCS_PATH . "/styles/{$style}.css")){
+			$path = GDOCS_ADDRESS . "/styles/{$style}.css";
 		}else {
-			$path = get_bloginfo ('url') . "/wp-content/plugins/inline-google-docs/styles/{$style}/{$style}.css";
+			$path = GDOCS_ADDRESS . "/styles/{$style}/{$style}.css";
 		}
 		
 		return "<link href='{$path}' rel='stylesheet' type='text/css' />";

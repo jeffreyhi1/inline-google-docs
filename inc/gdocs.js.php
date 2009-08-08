@@ -161,7 +161,7 @@ var GDocs = {
 	updateList: function (){
 		
 		// call php script to retrieve list of documents and spreadsheets
-		new Ajax.Request ('<?php echo $url ?>/wp-content/plugins/inline-google-docs/ajax-functions.php', {
+		new Ajax.Request ('<?php echo $url ?>/ajax-functions.php', {
 			method: 'get',
 			parameters: {action: 'update_list'},
 			onSuccess: function (transport, json){
@@ -240,10 +240,10 @@ var GDocs = {
 Ajax.Responders.register ({
 	onCreate: function (){
 		// appear
-		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/wp-content/plugins/inline-google-docs/inc/ajax-loader.gif');
+		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/ajax-loader.gif');
 	},
 	onComplete: function (){
 		// hide
-		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/wp-content/plugins/inline-google-docs/inc/ajax-refresh.png');
+		$('gdocs_helper_ajax').setAttribute ('src', '<?php echo $url ?>/inc/ajax-refresh.png');
 	}
 });
