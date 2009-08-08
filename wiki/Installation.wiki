@@ -17,7 +17,7 @@ Should you decide to checkout a copy of the plugin using SVN, make sure you corr
 drwxr-x--- codex www-data some-directory
 }}}
 
-As the cache and error log:
+As for the cache and error log:
 {{{
 drwxrwx--- codex www-data cache
 -rw-rw---- codex www-data error.log.php
