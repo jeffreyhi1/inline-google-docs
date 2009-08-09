@@ -29,6 +29,9 @@ http://img188.imageshack.us/img188/339/postbox.png
 
 If the list of documents and spreadsheets shown in the panel is outdated, just click on the refresh button located at the top left-hand corner of the panel and an updated list will be retrieved immediately.
 
+== HTML 5 Drag & Drop ==
+v0.7 introduces a new drag and drop functionality based on HTML 5 specifications. If your browser has native support for HTML 5 drag and drop events (at the time of writing, only Firefox 3.5), you can drag the document/spreadsheet from the panel and drop it in the textarea where you want it to appear.
+
 _Javascript needs to be enabled for this to work._
 
 = Column Headings =
