@@ -2,14 +2,18 @@
 #labels Phase-Support,Featured
 #sidebar Sidebar
 
-==Which PHP version does the plugin require?==
+== Which PHP version does the plugin require? ==
 
 PHP 5.
 
-==Does it use iframes?==
+== Does it use iframes? ==
 
 No, it doesn't.
 
-==How do I create zebra patterns for my tables?==
+== How do I create zebra patterns for my tables ?==
 
 As of v0.7, all rows and columns have an additional class that marks it as even or odd. Use these to create alternating patterns.
+
+== How can I get the numbers to display as rounded, without decimal points? ==
+
+The current plugin doesn't support any data manipulation (I would like to leave that to Google since they do such a great job.) To round your numbers, use the function ROUND (number, count) in your cell. Further documentation from Google is available [http://docs.google.com/support/bin/answer.py?answer=82712&funcType=Math&query=ROUND&searchSyntaxExact=1 here].
