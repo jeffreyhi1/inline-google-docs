@@ -281,18 +281,15 @@ class GDisplay {
 			div#gdocs_helper span{
 				display:block;
 				float:left;
-				color:#333;
-				margin:3px;
-				padding:3px;
-				min-height:70px;
-				min-width:70px;
+				margin:10px 0;
+				min-height:110px;
+				width:160px;
 				text-align:center;
 			}
 			
 			div#gdocs_helper span a{
-				background:white;
 				position:relative;
-				top:20px;
+				top:80px;
 				line-height:1.3em;
 			}
 			
@@ -322,11 +319,17 @@ class GDisplay {
 			}
 			
 			span.gdocs_document {
-				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/document.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/document.png") no-repeat center top;
+			}
+			span.gdocs_document:hover {
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/document_highlight.png") no-repeat center top;
 			}
 			
 			span.gdocs_spreadsheet {
-				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/spreadsheet.png") no-repeat center;
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/spreadsheet.png") no-repeat center top;
+			}
+			span.gdocs_spreadsheet:hover {
+				background:transparent url("<?php echo GDOCS_ADDRESS ?>/inc/img/spreadsheet_highlight.png") no-repeat center top;
 			}
 		</style>
 		<div id='gdocs_helper' class='postbox open'>
