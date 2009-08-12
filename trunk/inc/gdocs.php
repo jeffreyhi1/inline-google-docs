@@ -12,16 +12,11 @@
  * @author		Lim Jiunn Haur <codex.is.poetry@gmail.com>
  * @copyright	Copyright (c) 2008, Lim Jiunn Haur
  * @license		http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version		0.7
+ * @version		0.8
  * @package		gdocs
  * @subpackage	gdocs.inc
  * @todo bugs
  * - CAPTCHA
- * @todo plugin website
- * - hosting
- * - domain
- * - email everyone who has dropped a comment, email, trackback, invite to join group
- * - redirect from blog
  * @todo
  * - new ideas (single cell etc)
  * - brainstorm, research google api
@@ -71,8 +66,8 @@ set_include_path (get_include_path () . PATH_SEPARATOR . $path);
  * This autoloader only autoloads files in the Zend namespace.
  * @link	http://framework.zend.com/apidoc/core/
  */
-require_once ('Zend/Loader/AutoLoader.php');
-$autoloader = Zend_Loader_AutoLoader::getInstance();
+require_once ('Zend/Loader/Autoloader.php');
+$autoloader = Zend_Loader_Autoloader::getInstance();
 
 // load all other gdocs classes
 require_once ('gclient.php');

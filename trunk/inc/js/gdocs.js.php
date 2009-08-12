@@ -224,6 +224,10 @@ var GDocs = {
 		var div = $$ ('div#gdocs_helper div.inside');
 		div = div[0];
 		
+		if (json == null){
+			json = 'A connection error has occurred. Please try again later.';
+		}
+		
 		var p = new Element ('p').update ("<strong>" + json + "</strong>");
 		var ele = new Element ('div', {id: 'message_' + GDocs.error}).addClassName ('error').setStyle ({backgroundColor: "rgb(255, 170, 150)"});
 		ele.appendChild (p);

@@ -1,9 +1,10 @@
-#### Plugin Name ####
+=== Inline Google Docs ===
 Contributors: codex.is.poetry
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=codex%2eis%2epoetry%40gmail%2ecom&item_name=Inline%20Google%20Docs&no_shipping=0&no_note=1&tax=0&currency_code=SGD&lc=SG&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: google, documents, gdoc, inline, embed, spreadsheets
 Requires at least: 2.5
-Tested up to: 2.8.2
-Stable tag: 0.7
+Tested up to: 2.8.3
+Stable tag: 0.8
 
 This plugin allows you to embed Google Document/Spreadsheet content in posts and pages using shortcode.
 
@@ -24,38 +25,25 @@ or
 
 Replace `<doc-id>`, `<spreadsheet-id>`, and `<worksheet-id>` with the ID of the document or worksheet that you wish to embed. The ID's are available at the plugin's configuration page. Don't forget to enclose them in quotes.
 
-For example, the following shortcode:
-![Shortcode Example](screenshot-2.png Insert the shortcode where you want the document to be.)
-
-results in the following:
-![Embedded Google Document](screenshot-1.png Document content replaces shortcode and appears in the post.)
-
 #### Post Helper ####
 As of v0.5, you may embed a document or spreadsheet by simply clicking on its link in the **Google Documents/Spreadsheets** panel at the bottom of the page. This may be the preferred method as it relieves you of the technical task of typing the shortcode. Just place your caret where you want your document to appear and click on the title of your chosen document in the panel. This works in both Visual and HTML modes.
 
-![Post Helper](screenshot-3.png Using this helper, just point and click.)
-
 If the list of documents and spreadsheets shown in the panel is outdated, just click on the refresh button located at the top left-hand corner of the panel and an updated list will be retrieved immediately.
+
+**HTML 5 Drag & Drop**
+
+v0.7 introduces a new drag and drop functionality based on HTML 5 specifications. If your browser has native support for HTML 5 drag and drop events (at the time of writing, only Firefox 3.5), you can drag the document/spreadsheet from the panel and drop it in the textarea where you want it to appear. 
 
 _Javascript needs to be enabled for this to work._
 
 #### Column Headings ####
 v0.5 also introduced 2 optional attributes for spreadsheets, namely `headings` and `style` (`style` will be described in detail in a later section.) Due to technical reasons, all the column headings retrieved from Google Spreadsheets have their spaces removed and characters converted to the lowercase. Furthermore, if a column heading is left blank on the Google Spreadsheet, the Google API will replace it with a random string of characters.
 
-![Bad column headings](screenshot-4.png Corrupted column headings)
-
 As a workaround, the user may supply the plugin with a string of comma-separated headings that will be displayed in place of the headings retrieved from Google Spreadsheets. The replacement works from left to right i.e. if you provide only one heading and the spreadsheet has 3 columns, the heading of the leftmost column will be replaced.
 
-For example, the following:
-	
-	[gdocs st_id='...' wt_id='...' type='spreadsheet' headings='N, N Power, Multiply']
-
-results in:
-![Good column headings](screenshot-5.png?Custom headings)
-
-
 #### CSS Styling for Spreadsheets ####
-##### Selectors #####
+**Selectors**
+
 All embedded worksheets are formatted as valid tables with the following structure:
 
 	<table>
@@ -68,52 +56,46 @@ All embedded worksheets are formatted as valid tables with the following structu
 	</table>
 
 A typical `table` element has the following attributes:
+	
 	<table id="gdocs_<spreadsheet-id>_<worksheet-id>" class="gdocs gdocs_<spreadsheet-id>">
 
 A typical `tr` element has the following attributes:
+	
 	<tr class="row_<x> <odd|even>">
 
 A `th` element:
+	
 	<th class="col_<x> <odd|even>">
 
 Finally, a `td` element:
+	
 	<td class="col_<x> <odd|even>">
 
 Given the above markup, the following selectors are available:
 
-<table>
-	<thead>
-		<tr><th>Select</th><th>Syntax</th><th>Example</th></tr>
-	</thead>
-	<tbody>
-		<tr><td>All spreadsheets</td><td>`table.gdocs`</td><td></td></tr>
-		<tr><td>All worksheets of a particular spreadsheet</td><td>`table.gdocs_<spreadsheet_id>`</td><td>`table.gdocs_pkW3HTGwg6SDbucCgANRiPw`</td></tr>
-		<tr><td>A particular worksheet</td><td>`table#gdocs_<spreadsheet-id>_<worksheet-id>`</td><td>`table#gdocs_pkW3HTGwg6SDbucCgANRiPw_od7`</td></tr>
-		<tr><td>A column</td><td>`td.col_<x>`</td><td>`td.col_3`</td></tr>
-		<tr><td>A row</td><td>`tr.row_<x>`</td><td>`tr.row_7`</td></tr>
-		<tr><td>A cell</td><td>`tr.row_<x> td.col_<y>`</td><td>`tr.row_3 td.col_7`</td></tr>
-		<tr><td>All odd rows</td><td>`tr.odd`</td><td></td></tr>
-		<tr><td>All even columns</td><td>`td.even`</td><td></td></tr>
-	</tbody>
-</table>
+1. All spreadsheets: `table.gdocs`	
+1. All worksheets of a particular spreadsheet: `table.gdocs_<spreadsheet_id>`
+1. A particular worksheet: `table#gdocs_<spreadsheet-id>_<worksheet-id>`
+1. A column: `td.col_<x>`
+1. A row: `tr.row_<x>`
+1. A cell: `tr.row_<x> td.col_<y>`
+1. All odd rows: `tr.odd	`
+1. All even columns: `td.even`	
 
-##### Stylesheets #####
+**Stylesheets**
+
 You may also define a new style **class** and specify it using the `style` attribute in the shortcode. Refer to the stylesheets in `inline-google-docs/styles/` for examples.
 
 For example, suppose you would like to define a new class named _my-class_ for your tables. First, create a new CSS file in `inline-google-docs/styles/` and name it _my-class.css_. Then, specify the class in your shortcode, as follows:
 
 	[gdocs st_id='...' wt_id='...' type='spreadsheet' style='my-class']
 
-![Zebra](screenshot-6.png Styling tables)
-
 If you need to use images, create a new folder in `inline-google-docs/styles` and move _my-class.css_ as well as all your images into this folder. Name this folder after your class.
-
-![Style directory](screenshot-7.png Creating new styles)
 
 ####Supported Browsers####
 This plugin has been tested on IE 7, IE 8, Chrome, Firefox 2, Firefox 3, Firefox 3.5, Opera 9, and Safari 3. If you are using another browser, please update this [wiki](http://code.google.com/p/inline-google-docs/wiki/Guide) if it works and post a new issue if it doesn't.
 
-[Leave Feedback]("http://groups.google.com/group/inline-google-docs", "") | [Bug Report]("http://code.google.com/p/inline-google-docs/", "")
+[Leave Feedback](http://groups.google.com/group/inline-google-docs "Leave praises and criticism") | [Bug Report](http://code.google.com/p/inline-google-docs/ "Report a bug")
 
 == Installation ==
 
@@ -121,7 +103,7 @@ This plugin has been tested on IE 7, IE 8, Chrome, Firefox 2, Firefox 3, Firefox
 1. Upload the `inline-google-docs` folder into the `/wp-content/plugins/` directory
 1. Edit file permissions through your FTP client to make the `inline-google-docs/cache/` and `inline-google-docs/cache/error.log.php` writable.
 1. Activate the plugin through the **Plugins** menu in WordPress
-1. Go to **Settings**, then navigate to **G Docs**
+1. Go to **Settings**, then navigate to **Inline Google Docs**
 1. Provide the plugin with your Google account login credentials
 1. Input proxy settings if you are behind a proxy, then click on **Save Changes**
 1. The plugin will display the document/spreadsheet id's for your documents and spreadsheets
@@ -161,6 +143,15 @@ As of v0.7, all rows and columns have an additional class that marks it as even 
 
 == Changelog ==
 
+#### v0.7.5
+
+1. Zend library reduced
+1. Support for WPMU added
+1. Migrated to v2.7, implemented Settings API
+1. Tablesorter functionality added (blue skin included)
+1. Error handling improved
+1. Links within plugin modified, folder name may now be changed by user 
+
 ####02/08/09
 1. Improved error and exception management
 1. Support for Google Apps
@@ -198,3 +189,4 @@ As of v0.7, all rows and columns have an additional class that marks it as even 
 5. Custom headings
 6. Styling tables
 7. Creating new styles
+8. Possible CSS selectors

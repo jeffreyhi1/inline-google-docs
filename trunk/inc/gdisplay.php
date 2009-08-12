@@ -51,9 +51,12 @@ class GDisplay {
 			float:left;
 			width:50%;
 		}
+		div#gdocs_right {
+			float:right;
+			width:50%;
+		}
 		div#gdocs_right td.gdocs_loader {
 			background:#cfebf7 url("<?php echo GDOCS_ADDRESS ?>/inc/img/ajax-loader.gif") center right no-repeat;
-			padding:8px 8px 8px 20px;
 		}
 		div#gdocs_right tr.gdocs_loader td{
 			background-color:#cfebf7;
@@ -61,8 +64,7 @@ class GDisplay {
 		div#gdocs_right table.hor-zebra {
 			font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 			font-size: 10px;
-			margin: 15px;
-			width: 35%;
+			margin: 15px 0;
 			text-align: left;
 			border-collapse: collapse;
 		}
@@ -209,7 +211,7 @@ class GDisplay {
 					<tr><th>Title</th><th>Document ID</th></tr>
 				</thead>
 				<tbody id='gdocs_list_document'>
-					<tr class='gdocs_loader'><td class='gdocs_loader'>Loading...</td><td></td></tr>
+					<tr class='gdocs_loader'><td>Loading...</td><td class='gdocs_loader'></td></tr>
 				</tbody>
 			</table>
 	<?php
@@ -232,7 +234,7 @@ class GDisplay {
 					<tr><th>Title</th><th>Spreadsheet ID</th><th>Worksheets</th></tr>
 				</thead>
 				<tbody id='gdocs_list_spreadsheet'>
-					<tr class='gdocs_loader'><td class='gdocs_loader'>Loading...</td><td></td><td></td></tr>
+					<tr class='gdocs_loader'><td>Loading...</td><td class='gdocs_loader'></td><td></td></tr>
 				</tbody>
 			</table>
 		</div>
