@@ -109,7 +109,7 @@ If you need to use images, create a new folder in `inline-google-docs/styles` an
 http://img156.imageshack.us/img156/8563/styles.png
 
 
-= TableSorter =
+= Table Sorter =
 Inline Google Docs now includes [http://tablesorter.com/ tablesorter]!
 
 To use tablesorter without passing any parameters, set `sort` to `true` in your shortcode, as follows:
