@@ -112,7 +112,7 @@ http://img156.imageshack.us/img156/8563/styles.png
 = Table Sorter =
 Inline Google Docs now includes [http://tablesorter.com/ tablesorter]!
 
-To use tablesorter without passing any parameters, set `sort` to `true` in your shortcode, as follows:
+To use tablesorter with the default options, set `sort` to `true` in your shortcode, as follows:
 {{{
 	[gdocs ... sort="true"]
 }}}
@@ -129,6 +129,8 @@ Certain characters, such as square brackets, will confuse the shortcode parser. 
 	</script>
 	[gdocs type='spreadsheet' st_id='twRDk9_BEs9E6Jevb82ETvw' wt_id='od7' style='tablesorter' sort="properties" headings='A, B, C, D, E, F, G, H']
 }}}
+
+_Note: You only need to use the `sort` attribute once. If you use `sort="properties"`, you don't have to use `sort="true"`._
 
 v0.8 also includes the default blue theme; set `style` to `tablesorter` to use it to style your tables.
 
