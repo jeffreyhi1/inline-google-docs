@@ -10,6 +10,13 @@ PHP 5.
 
 No, it doesn't.
 
+== The plugin doesn't show up on my list of installed plugins. Why? ==
+
+The most probable reason for this is because the user that your Web server runs as (usually `nobody` or `www-data`) does not have read permissions to the plugin files. To fix this, use `chgrp` to change the group of the files to one that your Web server runs as. For example,
+{{{
+    chgrp -R www-data .
+}}}
+
 == How do I create zebra patterns for my tables ?==
 
 As of v0.7, all rows and columns have an additional class that marks it as even or odd. Use these to create alternating patterns.
