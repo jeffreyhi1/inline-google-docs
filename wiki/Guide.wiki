@@ -117,7 +117,7 @@ To use tablesorter with the default options, set `sort` to `true` in your shortc
 	[gdocs ... sort="true"]
 }}}
 
-To pass simple parameters to tablesorter, simply include them within braces in the `sort` attribute, as follows:
+If you wish to configure tablesorter, simply include the parameters within braces in the `sort` attribute, as follows:
 {{{
 	[gdocs ... sort="{cancelSelection:false,...}"]
 }}}
@@ -132,7 +132,9 @@ Certain characters, such as square brackets, will confuse the shortcode parser. 
 
 _Note: You only need to use the `sort` attribute once. If you use `sort="properties"`, you don't have to use `sort="true"`._
 
-v0.8 also includes the default blue theme; set `style` to `tablesorter` to use it to style your tables.
+v0.8 also includes the default blue theme; set `style="tablesorter"` to use it to style your tables.
+
+[http://tablesorter.com/docs/#Configuration tablesorter Configuration»]
 
 = Supported Browsers =
 This plugin has been tested on IE 7, IE 8, Chrome, Firefox 2, Firefox 3, Firefox 3.5, Opera 9, and Safari 3. If you are using another browser, please update this wiki if it works and post a new issue if it doesn’t.
