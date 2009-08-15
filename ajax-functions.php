@@ -29,6 +29,8 @@ require_once ('../../../wp-includes/formatting.php');
 
 ##################### BEGIN Global Execution Space ################################
 
+header ('Cache-Control: no-cache');
+
 /**
  * Data regarding current user
  * @global	mixed	object containing user data
