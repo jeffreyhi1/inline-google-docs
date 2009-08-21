@@ -48,6 +48,34 @@ var GDocsOptions = {
 	},
 	
 	/*
+	 *
+	 */
+	verify: function (ele){
+	
+		Element.extend (ele);	
+		ele.setAttribute ('value', 'Verifying...');
+		
+		// call php script to verify with Google
+		new Ajax.Request ('<?php echo $url ?>/ajax-functions.php?action=verify', {
+			method: 'post',
+			parameters: ele.up().serialize(true),
+			onSuccess: function (transport, json){
+				GDocsOptions._clearListExceptions ();
+				GDocsOptions._updateListHTML (transport, json);
+			},
+			onException: function (transport, json){
+				GDocsOptions._clearListExceptions ();
+				GDocsOptions._updateListException (transport, json);		
+			},
+			onFailure: function (transport, json){
+				GDocsOptions._clearListExceptions ();
+				GDocsOptions._updateListException (transport, json);
+			}
+		});
+		
+	},
+	
+	/*
 	 * AJAX Post-request handler
 	 * Update HTML to display new list
 	 */
@@ -109,6 +137,16 @@ var GDocsOptions = {
 			GDocsOptions._updateListException (null, json.db_error);
 		}
 	
+	},
+	
+	/*
+	 * Reset all exceptions
+	 */
+	_clearListExceptions: function (){
+		var errors = $$('div.error');
+		errors.each (function (ele){
+			ele.remove();
+		});
 	},
 	
 	/*

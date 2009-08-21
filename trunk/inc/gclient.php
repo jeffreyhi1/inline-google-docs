@@ -58,13 +58,13 @@ abstract class GClient extends Zend_Gdata{
 	 * @see		GClient::getInstance()
 	 * @return	GClient
 	 */
-	public function __construct ($service){
+	public function __construct ($service, $token=NULL, $captcha=NULL){
 		// get login credentials
 		$user = get_option ('gdocs_user');
 		$pwd = get_option ('gdocs_pwd');
 		
 		// create Zend Http Client
-		$httpClient = Zend_Gdata_ClientLogin::getHttpClient($user, $pwd, $service);		
+		$httpClient = Zend_Gdata_ClientLogin::getHttpClient($user, $pwd, $service, NULL, NULL, $token, $captcha);		
 		$this->setProxy ($httpClient);
 		
 		// create Zend Gdata client
@@ -102,11 +102,11 @@ abstract class GClient extends Zend_Gdata{
 	 * @return	GClient	$client		GClient object
 	 * @static
 	 */
-	public static function getInstance ($service){
+	public static function getInstance ($service, $token=NULL, $captcha=NULL){
 		if (!in_array ($service, array_keys (self::$_singleton))) throw new Exception();
-		if (is_null(self::$_singleton[$service])){
+		if (isset($token) || is_null(self::$_singleton[$service])){
 			$class = 'GClient_' . ucfirst ($service);
-			self::$_singleton[$service] = new $class ();
+			self::$_singleton[$service] = new $class ($token, $captcha);
 		}
 		return self::$_singleton[$service];
 	}
@@ -128,8 +128,8 @@ class GClient_Doc extends GClient {
 	 * @method	GClient_Doc	GClient_Doc()	GClient_Doc()	creates and initializes new GClient object for Google Documents
 	 * @return	GClient_Doc
 	 */
-	public function __construct (){
-		parent::__construct (Zend_Gdata_Docs::AUTH_SERVICE_NAME);
+	public function __construct ($token=NULL, $captcha=NULL){
+		parent::__construct (Zend_Gdata_Docs::AUTH_SERVICE_NAME, $token, $captcha);
 	}
 	
 	/**
@@ -199,8 +199,8 @@ class GClient_St extends GClient {
 	 * @method	GClient_St	GClient_St()	GClient_St()	creates and initializes new GClient object for Google Spreadsheets
 	 * @return	GClient_St
 	 */
-	public function __construct (){
-		parent::__construct (Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME);
+	public function __construct ($token=NULL, $captcha=NULL){
+		parent::__construct (Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME, $token, $captcha);
 	}
 	
 	/**
