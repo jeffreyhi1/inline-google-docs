@@ -62,7 +62,7 @@ if (isset($_GET['action'])){
 		header('X-JSON: (' . json_encode ($error) . ')');
 	} catch (Zend_Gdata_App_CaptchaRequiredException $e){
 		// google requested captcha
-		$error = "Google requested CAPTCHA verification. Please try again later.";
+		$error = GDisplay::printCaptchaError ($e);
 		header ('HTTP/1.0 400 Bad Request');
 		header('X-JSON: (' . json_encode ($error) . ')');
 	} catch (Zend_Gdata_App_AuthException $e) {
@@ -185,4 +185,22 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 	}
 }
 
+/**
+ * Verify CAPTCHA
+ */
+function gdocs_verify (){
+	$captcha = NULL;
+	$token = NULL;
+	if (isset ($_POST['gdocs_captcha']) && isset ($_POST['gdocs_token'])){
+		$captcha = $_POST['gdocs_captcha']; $token = $_POST['gdocs_token'];
+		$gdClient = GClient::getInstance(GDOCS_DOCUMENT, $token, $captcha);
+		gdocs_update_list ();
+	}else {
+		// missing paramter
+		$error = "Required parameters missing.";
+		header ('HTTP/1.0 400 Bad Request');
+		header('X-JSON: (' . json_encode ($error) . ')');
+		return NULL;
+	}
+}
 ?>

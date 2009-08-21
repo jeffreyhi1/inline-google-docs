@@ -81,6 +81,10 @@ class GDisplay {
 		div#gdocs_right table.hor-zebra .odd {
 			background: #e8edff;
 		}
+		
+		span.description {
+			font-style:normal;
+		}
 	</style>
 	
 	<div class='wrap'>
@@ -115,7 +119,7 @@ class GDisplay {
 					<tbody>
 						<tr valign="top">
 							<th scope="row"><label for='gdocs_user'>Username</label></th>
-							<td><input id='gdocs_user' type="text" size="40" name="gdocs_user" value="<?php echo get_option ('gdocs_user'); ?>" /><br/><span class='description'>For Google Apps users, append your username with <code>@yourdomain.com</code></span></td>
+							<td><input id='gdocs_user' type="text" size="40" name="gdocs_user" value="<?php echo get_option ('gdocs_user'); ?>" /><br/><span class='description'><strong>For Google Apps users, append your username with </strong><code>@yourdomain.com</code></span></td>
 						</tr>
 						<tr valign="top">
 							<th scope="row"><label for='gdocs_pwd'>Password</label></th>
@@ -172,7 +176,7 @@ class GDisplay {
 					<tbody>
 						<tr valign="top">
 							<th scope="row"><label for='gdocs_cache_expiry'>Lifespan</label></th>
-							<td><input type="text" size="40" id='gdocs_cache_expiry' name="gdocs_cache_expiry" value="<?php echo get_option ('gdocs_cache_expiry'); ?>" /><span class='description'>minutes</span><br/><span class='description' style="font-style:normal"><strong>Set to <code>0</code> to turn off caching.</strong></span></td>
+							<td><input type="text" size="40" id='gdocs_cache_expiry' name="gdocs_cache_expiry" value="<?php echo get_option ('gdocs_cache_expiry'); ?>" /><span class='description'>minutes</span><br/><span class='description'><strong>Set to <code>0</code> to turn off caching.</strong></span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -500,6 +504,23 @@ class GDisplay {
 		
 		return "<link href='{$path}' rel='stylesheet' type='text/css' />";
 	
+	}
+	
+	/**
+	 * Prints CAPTCHA verfication form
+	 * @param	Zend_Gdata_App_CaptchaRequiredException $e
+	 * @return	string	$html	HTML string
+	 */
+	public static function printCaptchaError (Zend_Gdata_App_CaptchaRequiredException $e){
+		$obj = strpos ($_SERVER['HTTP_REFERER'], 'options-general.php') === FALSE ? 'GDocs' : 'GDocsOptions';
+		return 
+		"Google requested CAPTCHA verification.<br/>
+		<img src='" . $e->getCaptchaUrl() . "' style='margin:5px 0 4px' />
+		<form method='post' action='options.php' onsubmit='javascript: {$obj}.verify (this); return false;'>
+			<input type='hidden' name='gdocs_token' id='gdocs_token' value='" . $e->getCaptchaToken() . "'  />
+			<input type='text' name='gdocs_captcha' size='40' id='gdocs_captcha' />
+			<input type='submit' value='Submit' onclick='javascript: {$obj}.verify (this); return false;' />
+		</form>";
 	}
 	
 	/**#@-*/

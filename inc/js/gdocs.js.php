@@ -66,6 +66,34 @@ var GDocs = {
 	},
 	
 	/*
+	 * CAPTCHA handler
+	 */
+	verify: function (ele){
+	
+		Element.extend (ele);
+		ele.setAttribute ('value', 'Verifying...');
+		
+		// call php script to verify with Google
+		new Ajax.Request ("<?php echo $url ?>/ajax-functions.php?action=verify", {
+			method: 'post',
+			parameters: ele.up().serialize(true),
+			onSuccess: function (transport, json){
+				GDocs._clearListExceptions ();
+				GDocs._updateListHTML (transport, json);
+			},
+			onException: function (transport, json){
+				GDocs._clearListExceptions ();
+				GDocs._updateListException (transport, json);		
+			},
+			onFailure: function (transport, json){
+				GDocs._clearListExceptions ();
+				GDocs._updateListException (transport, json);
+			}
+		});
+		
+	},
+	
+	/*
 	 * Click handler
 	 */
 	ring: function (id, type){	// id: main_id+sub_id, type: document or spreadsheet
@@ -213,6 +241,15 @@ var GDocs = {
 		
 		});
 	
+	},
+	
+	/*
+	 * Clear errors
+	 */
+	_clearListExceptions: function (){
+		var div = $$ ('div#gdocs_helper div.inside');
+		div = div[0];
+		div.update ();
 	},
 	
 	/*
