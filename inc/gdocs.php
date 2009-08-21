@@ -289,6 +289,7 @@ function gdocs_install (){
 	
 	// create table in DB to store shortcode tags
 	try {
+		GDB::drop ();
 		GDB::create ();
 	}catch (GDB_Exception $e){
 		gdocs_error ($e);
