@@ -381,6 +381,19 @@ class GDisplay {
 	}
 	
 	/**
+	 * Formats div tag for document
+	 * @param	string	$id			id of document
+	 * @param	string	$content	html to embed
+	 * @param	string	$style		style classes to include
+	 * @return	string	$html		formatted string
+	 */
+	public static function printDocTag ($id, $content, $style=NULL){
+		$classes = preg_split ("/,(\s)?/", $style);
+		$classes = implode (' ', $classes);
+		return "<div class='gdocs {$classes}' id='gdocs_{$id}'>" . $content . "</div>";
+	}
+	
+	/**
 	 * Formats table tag
 	 * @param	string			$st_id		spreadsheet id
 	 * @param	string			$wt_id		worksheet id
@@ -394,7 +407,9 @@ class GDisplay {
 		 * class=gdocs allows global styles to be set across all Google Docs/Spreadsheets
 		 * class=$style to associate this table with a predefined stylesheet
 		 */
-		return "<table class='gdocs gdocs_{$st_id} {$style}' id='gdocs_{$st_id}_{$wt_id}'>\r\n";
+		$classes = preg_split ("/,(\s)?/", $style);
+		$classes = implode (' ', $classes);
+		return "<table class='gdocs gdocs_{$st_id} {$classes}' id='gdocs_{$st_id}_{$wt_id}'>\r\n";
 	}
 	
 	/**
@@ -418,7 +433,7 @@ class GDisplay {
 			
 			if (isset ($headers)){
 				// custom headers given
-				$colHeads = preg_split ("/,\s+/", $headers);
+				$colHeads = preg_split ("/,(\s)?/", $headers);
 				
 				// get all the headers specified by user
 				foreach ($colHeads as $colHead){
@@ -488,21 +503,31 @@ class GDisplay {
 	
 	/**
 	 * Prints stylesheet <link>
-	 * @param	string	$style	Style class for this spreadsheet
+	 * @param	string	$style	Style classes for this spreadsheet
 	 * @return	string	$html	<style> tag to add to the HTML output
 	 */
 	public static function printStylesheet ($style){
 		
-		if (in_array ($style, self::$stylesheets)) return NULL;
-		self::$stylesheets[] = $style;
+		// split style classes
+		$classes = preg_split ("/,(\s)?/", $style);
 		
-		if (file_exists (GDOCS_PATH . "/styles/{$style}.css")){
-			$path = GDOCS_ADDRESS . "/styles/{$style}.css";
-		}else if (file_exists (GDOCS_PATH . "/styles/{$style}/{$style}.css")) {
-			$path = GDOCS_ADDRESS . "/styles/{$style}/{$style}.css";
+		$html = "";
+		
+		foreach ($classes as $class){
+		
+			if (in_array ($class, self::$stylesheets)) continue;
+			self::$stylesheets[] = $class;
+			
+			if (file_exists (GDOCS_PATH . "/styles/{$class}.css")){
+				$path = GDOCS_ADDRESS . "/styles/{$class}.css";
+				$html .= "<link href='{$path}' rel='stylesheet' type='text/css' />\r\n";
+			}else if (file_exists (GDOCS_PATH . "/styles/{$class}/{$class}.css")) {
+				$path = GDOCS_ADDRESS . "/styles/{$class}/{$class}.css";
+				$html .= "<link href='{$path}' rel='stylesheet' type='text/css' />\r\n";
+			}
+
 		}
-		
-		return "<link href='{$path}' rel='stylesheet' type='text/css' />";
+		return $html;
 	
 	}
 	
