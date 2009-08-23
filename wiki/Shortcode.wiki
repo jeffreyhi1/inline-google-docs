@@ -1,0 +1,48 @@
+#summary Shortcode Reference
+
+_Warning: This is still a draft_
+
+= gdocs =
+
+||<strong>Type</strong>||<strong>Required Attributes</strong>||<strong>Optional Attributes</strong>||
+||Document||[#type type], [#id id]||[#style style]||
+||Spreadsheet||[#type type], [#st_id st_id], [#wt_id wt_id]||[#headings headings], [#sort sort], [#style style]||
+
+
+General syntax:
+{{{
+[gdocs]default text[/gdocs]
+}}}
+
+Wordpress will parse the above shortcode and pass the attributes to the plugin. If the plugin fails to retrieve the document/spreadsheet from Google, it will display the text within the `gdocs` tags.
+
+== Examples ==
+{{{
+<!-- Embedding a Google Document -->
+I want my document to appear in between this line
+[gdocs type='document' id='ddk7f9g2_15g3w6q9fk']OOPS... [/gdocs]
+and this line.
+<!-- The string "OOPS... " will be displayed in event of failure -->
+}}}
+
+results in the following:
+
+http://img40.imageshack.us/img40/9343/sampledoc.png
+
+Add classes to the documents this way:
+{{{
+<!-- Styling a Google Document -->
+I want my document to appear in between this line
+[gdocs type='document' id='ddk7f9g2_15g3w6q9fk' style='x, y, z']
+and this line.
+}}}
+
+results in
+{{{
+<div id="gdocs_ddk7f9g2_15g3w6q9fk" class="gdocs x y z">
+  <!-- Content from Google Document -->
+  <h4 style="color: rgb(11, 83, 148);">HI! I am a <span style="background-color: rgb(255, 153, 0);">Google</span> Document.</h4><br/>
+</div>
+}}}
+----
+= Attributes =
