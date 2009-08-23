@@ -165,23 +165,32 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 	
 	foreach ($feed as $entry){
 		
-		// get worksheets feed
-		$wtFeed = $gsClient->getWorksheets ($entry->main_id);
+		try {
+			// get worksheets feed
+			$wtFeed = $gsClient->getWorksheets ($entry->main_id);
+					
+			if ($wtFeed) foreach ($wtFeed->entries as $wtEntry){
+			
+				// extract worksheet id
+				$wtId = split ('/', $wtEntry->getId()->getText());
+				$entry->sub_id = $wtId[8];
 				
-		if ($wtFeed) foreach ($wtFeed->entries as $wtEntry){
-		
-			// extract worksheet id
-			$wtId = split ('/', $wtEntry->getId()->getText());
-			$entry->sub_id = $wtId[8];
-			
-			// extract worksheet title
-			$entry->sub_title = $wtEntry->getTitleValue ();
-			
-			// push to stack
-			$docs[] = clone $entry;
-			
+				// extract worksheet title
+				$entry->sub_title = $wtEntry->getTitleValue ();
+				
+				// push to stack
+				$docs[] = clone $entry;
+				
+			}
+		}catch (Zend_Gdata_App_HttpException $e){
+			$res = $e->getResponse();
+			if ($res->getStatus() === 403){ // Forbidden
+				// Spreadsheet access denied. Google bug, this is a workaround
+				continue;
+			}
+			throw $e;
 		}
-	
+
 	}
 }
 
