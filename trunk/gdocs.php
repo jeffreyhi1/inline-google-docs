@@ -39,22 +39,26 @@ Author URI: http://broken-watch.info/
 
 if (strnatcmp (phpversion(), "5.0.0") < 0){
 	// old PHP
-	?>
-	<div class='error' id='message' style='background-color: rgb(255, 170, 150);'><p><?php _e("This plugin requires PHP 5 and above to work. Your server currently runs PHP version " . phpversion() . ". Please badger your host to update the software.") ?></p></div>
-	<?php
-	die();
+	global $pagenow;
+	if ($pagenow === 'plugins.php'){
+		ob_start ();
+		?>
+		<div class='error' id='message' style='background-color: rgb(255, 170, 150);'><p><?php _e("Inline Google Docs requires PHP 5 and above to work. Your server currently runs PHP version " . phpversion() . ". Please badger your host to update the software.") ?></p></div>
+		<?php
+	}
+	return NULL;
 }else {
-	try {
+	//try {
 		/**
 		 * Load and run the main execution file
 		 */
 		require_once ('inc/gdocs.php');
-	}catch (Exception $e){
+	/*}catch (Exception $e){
 		@file_put_contents (dirname(__FILE__) . '/cache/error.log.php', (String)$e, FILE_APPEND);
 		?>
 		<div class='error' id='message' style='background-color: rgb(255, 170, 150);'><p><?php _e("A possible error has been detected. Please contact plugin author with <a href='" . get_bloginfo('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'><em>error.log.php</em></a> for assistance.") ?></p></div>
 		<?php
-	}
+	}*/
 	
 	// add installation hooks
 	register_activation_hook (__FILE__, 'gdocs_install');
