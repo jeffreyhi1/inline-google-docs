@@ -88,7 +88,7 @@ require_once ('gfeed.php');
 function gdocs_display ($atts, $content=NULL){
 
 	// check parameter exists
-	if (is_null ($atts['type'])) return NULL;
+	if (is_null ($atts['type'])) return $content;
 	
 	try {
 		// e.g. gdocs_display_document ($atts);
@@ -96,8 +96,8 @@ function gdocs_display ($atts, $content=NULL){
 		return $func ($atts);
 		
 	} catch (Exception $e) {
-		// any error at all
-		return NULL;
+		// any error at all, return text
+		return $content;
 	}
 	
 }
@@ -113,7 +113,7 @@ function gdocs_display ($atts, $content=NULL){
 function gdocs_display_document ($atts){
 
 	// check parameter exists
-	if (is_null ($atts['id'])) return NULL;
+	if (is_null ($atts['id'])) throw new Exception ();
 	
 	// try cache
 	$cache_session = new GCache ($atts['id']);
@@ -127,7 +127,7 @@ function gdocs_display_document ($atts){
 	$gClient = GClient::getInstance (GDOCS_DOCUMENT);
 	
 	// connect to Google, get feed, markup
-	$html = "<div class='gdocs' id='gdocs_{$atts['id']}'>" . $gClient->getDoc($atts[id]) . "</div>";
+	$html = GDisplay::printDocTag ($atts['id'], $gClient->getDoc($atts['id']), $atts['style']);
 	
 	// keep a copy in cache
 	try {
@@ -152,7 +152,7 @@ function gdocs_display_document ($atts){
 function gdocs_display_spreadsheet ($atts){
 
 	// check parameters exist
-	if (is_null ($atts['wt_id']) || is_null ($atts['st_id'])) return NULL;
+	if (is_null ($atts['wt_id']) || is_null ($atts['st_id'])) throw new Exception ();
 	
 	// print stylesheet <link>, not cached as the style attribute is variable
 	$html = isset ($atts['style']) ? GDisplay::printStylesheet ($atts['style']) : "";
@@ -163,7 +163,7 @@ function gdocs_display_spreadsheet ($atts){
 		$html .= GDisplay::printSortScript ($atts['st_id'], $atts['wt_id'], $params);
 	}
 	
-	// print table tag. we don't want to cache this as the style attribute is variable.
+	// print table tag
 	$html .= GDisplay::printStTblTag ($atts['st_id'], $atts['wt_id'], $atts['style']);
 	
 	// try cache, retrieve table
@@ -180,7 +180,7 @@ function gdocs_display_spreadsheet ($atts){
 	
 	// get list feed
 	$feed = $gsClient->getLists($atts['st_id'], $atts['wt_id']);
-	if (!$feed) return NULL;
+	if (!$feed) throw new Exception ();
 	
 	// format
 	$tbl = GDisplay::printStTbl ($feed, $atts['headings']);
