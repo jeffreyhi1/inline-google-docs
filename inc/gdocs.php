@@ -256,7 +256,7 @@ function gdocs_options_setup (){
  */
 function gdocs_error (Exception $e){
 	$error_log = GDOCS_PATH . '/cache/error.log.php';
-	@file_put_contents ($error_log, (String)$e, FILE_APPEND);
+	@file_put_contents ($error_log, (String)$e . "\r\n", FILE_APPEND);
 }
 
 /**
