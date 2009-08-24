@@ -46,3 +46,103 @@ results in
 }}}
 ----
 = Attributes =
+
+== type ==
+*Required* <br/>
+_enum_ `document|spreadsheet`
+
+Indicates the type of file to embed.
+{{{
+[gdocs type='document' ...]
+}}}
+{{{
+[gdocs type='spreadsheet' ...]
+}}}
+
+== id ==
+*Required for Documents* <br/>
+_string_
+
+Google generated document ID. Available at plugin configuration page.
+{{{
+[gdocs id='ddk7f9g2_15g3w6q9fk' ...]
+}}}
+
+== st_id ==
+*Required for Spreadsheets* <br/>
+_string_
+
+Google generated spreadsheet ID. Available at plugin configuration page.
+{{{
+[gdocs st_id='ddk7f9g2_15g3w6q9fk' ...]
+}}}
+
+== wt_id ==
+*Required for Spreadsheets* <br/>
+_string_
+
+Google generated worksheet ID. Available at plugin configuration page.
+{{{
+[gdocs wt_id='od6' ...]
+}}}
+
+== headings ==
+_comma-separated values_
+
+Custom column headings to display in tables. These will replace the headings retrieved from Google. Headings are replaced from left to right, i.e. if there are 4 columns and you provide only 3 values, the 4th column heading will not be replaced.
+{{{
+[gdocs headings='First, Second, Third' type='spreadsheet' ...]
+}}}
+
+results in
+{{{
+<!-- Embedded worksheet -->
+<thead>
+  <tr>
+    <th>First</th>
+    <th>Second</th>
+    <th>Third</th>
+    <th>cxh4</th>    <!-- Not replaced -->
+  </tr>
+</thead>
+}}}
+
+== sort ==
+_string_ `true | <javascript variable>`
+
+Specifies parameters for tablesorter.
+
+To use tablesorter with the default options, set sort to true in your shortcode, as follows:
+{{{
+[gdocs sort="true" ...]
+}}}
+
+To use tablesorter with custom options, include the parameters within braces in the sort attribute:
+{{{
+[gdocs sort="{cancelSelection:false}" ...]
+}}}
+
+Certain characters, such as square brackets, will confuse the shortcode parser. If you have complex parameters, pass them through a Javascript variable, as follows:
+{{{
+<script type='text/javascript'>
+  var properties = {cancelSelection:false, sortList:[[1,1]]};
+</script>
+[gdocs sort="properties" ...]
+}}}
+
+[http://tablesorter.com/docs/#Configuration tablesorter Configuration»]
+
+== style ==
+_comma-separated values_
+
+Specifies CSS classes for documents and spreadsheets. If a corresponding stylesheet is found in `inline-google-docs/styles/`, it will be imported via a `<link>` tag.
+
+For example,
+{{{
+[gdocs style='x, y, nice' ...]
+}}}
+
+If the plugin locates a readable file `inline-google-docs/styles/nice.css` or `inline-google-docs/styles/nice/nice.css`, the file will be imported into the HTML page. Furthermore, the DIV or TABLE element housing the Google Document or Spreadsheet will be given these values as classes.
+{{{
+<div id="..." class="gdocs x y nice">
+}}}
