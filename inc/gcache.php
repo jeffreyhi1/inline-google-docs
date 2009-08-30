@@ -123,11 +123,11 @@ class GCache {
 		switch (count($atts)){
 			case 1:
 				// Google Document
-				return $this->dir . $this->cleanFilename ("doc_".$atts[0].".html");
+				return $this->dir . $this->cleanFilename (GDOCS_DOCUMENT . "_".$atts[0].".html");
 				break;
 			case 2:
 				// Google Spreadsheet
-				return $this->dir . $this->cleanFilename ("st_".$atts[0]."_".$atts[1].".html");
+				return $this->dir . $this->cleanFilename (GDOCS_SPREADSHEET . "_".$atts[0]."_".$atts[1].".html");
 				break;
 		}
 	}
