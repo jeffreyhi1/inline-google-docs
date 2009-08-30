@@ -274,6 +274,23 @@ class GDisplay {
 	}
 	
 	/**
+	 * Prints CAPTCHA verfication form
+	 * @param	Zend_Gdata_App_CaptchaRequiredException $e
+	 * @return	string	$html	HTML string
+	 */
+	public static function printCaptchaError (Zend_Gdata_App_CaptchaRequiredException $e){
+		$obj = strpos ($_SERVER['HTTP_REFERER'], 'options-general.php') === FALSE ? 'GDocs' : 'GDocsOptions';
+		return 
+		"Google requested CAPTCHA verification.<br/>
+		<img src='" . $e->getCaptchaUrl() . "' style='margin:5px 0 4px' />
+		<form method='post' action='options.php' onsubmit='javascript: {$obj}.verify (this); return false;'>
+			<input type='hidden' name='gdocs_token' id='gdocs_token' value='" . $e->getCaptchaToken() . "'  />
+			<input type='text' name='gdocs_captcha' size='40' id='gdocs_captcha' />
+			<input type='submit' value='Submit' onclick='javascript: {$obj}.verify (this); return false;' />
+		</form>";
+	}
+	
+	/**
 	 * Prints a postbox in the edit-post / edit-page page
 	 * Lists all Google documents and Google Spreadsheets
 	 * Lets user add shortcode tag to post by clicking
@@ -387,10 +404,10 @@ class GDisplay {
 	 * @param	string	$style		style classes to include
 	 * @return	string	$html		formatted string
 	 */
-	public static function printDocTag ($id, $content, $style=NULL){
+	public static function printDocTag ($id, $style=NULL){
 		$classes = preg_split ("/,(\s)?/", $style);
 		$classes = implode (' ', $classes);
-		return "<div class='gdocs {$classes}' id='gdocs_{$id}'>" . $content . "</div>";
+		return "<div class='gdocs {$classes}' id='gdocs_{$id}'>";
 	}
 	
 	/**
@@ -529,23 +546,6 @@ class GDisplay {
 		}
 		return $html;
 	
-	}
-	
-	/**
-	 * Prints CAPTCHA verfication form
-	 * @param	Zend_Gdata_App_CaptchaRequiredException $e
-	 * @return	string	$html	HTML string
-	 */
-	public static function printCaptchaError (Zend_Gdata_App_CaptchaRequiredException $e){
-		$obj = strpos ($_SERVER['HTTP_REFERER'], 'options-general.php') === FALSE ? 'GDocs' : 'GDocsOptions';
-		return 
-		"Google requested CAPTCHA verification.<br/>
-		<img src='" . $e->getCaptchaUrl() . "' style='margin:5px 0 4px' />
-		<form method='post' action='options.php' onsubmit='javascript: {$obj}.verify (this); return false;'>
-			<input type='hidden' name='gdocs_token' id='gdocs_token' value='" . $e->getCaptchaToken() . "'  />
-			<input type='text' name='gdocs_captcha' size='40' id='gdocs_captcha' />
-			<input type='submit' value='Submit' onclick='javascript: {$obj}.verify (this); return false;' />
-		</form>";
 	}
 	
 	/**#@-*/
