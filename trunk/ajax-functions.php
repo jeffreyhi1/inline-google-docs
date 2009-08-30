@@ -51,8 +51,10 @@ if ($userdata->user_level < 8){
 $action = NULL;
 if (isset($_GET['action'])){
 	$action = $_GET['action'];
+	
 	// execute
 	$func = 'gdocs_' . $action;
+	
 	try {
 		$func ();
 	} catch (Zend_Http_Client_Adapter_Exception $e){
@@ -106,19 +108,19 @@ if (isset($_GET['action'])){
 function gdocs_update_list (){
 	
 	// get Google Documents client
-	$gdClient = GClient::getInstance(GDOCS_DOCUMENT);
+	@$gdClient = GClient::getInstance(GDOCS_DOCUMENT);
 	
 	// initialize collector stack
 	$docs = array();
 	
 	// update document list
-	gdocs_update_documents ($gdClient, &$docs);
+	@gdocs_update_documents ($gdClient, &$docs);
 	
 	// get Google Spreadsheets client
-	$gsClient = GClient::getInstance(GDOCS_SPREADSHEET);
+	@$gsClient = GClient::getInstance(GDOCS_SPREADSHEET);
 	
 	// update spreadsheet list
-	gdocs_update_sts ($gdClient, $gsClient, &$docs);
+	@gdocs_update_sts ($gdClient, $gsClient, &$docs);
 	
 	$json = array ('docs' => $docs);
 	
@@ -127,7 +129,7 @@ function gdocs_update_list (){
 		GDB::write ($docs);
 	} catch (GDB_Exception $e){
 		$json['db_error'] = $e->getMessage();
-		gdocs_error ($e);
+		@gdocs_error ($e);
 	}
 	
 	// return json data

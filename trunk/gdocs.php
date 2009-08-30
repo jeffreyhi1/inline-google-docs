@@ -48,17 +48,7 @@ if (strnatcmp (phpversion(), "5.0.0") < 0){
 	}
 	return NULL;
 }else {
-	//try {
-		/**
-		 * Load and run the main execution file
-		 */
-		require_once ('inc/gdocs.php');
-	/*}catch (Exception $e){
-		@file_put_contents (dirname(__FILE__) . '/cache/error.log.php', (String)$e, FILE_APPEND);
-		?>
-		<div class='error' id='message' style='background-color: rgb(255, 170, 150);'><p><?php _e("A possible error has been detected. Please contact plugin author with <a href='" . get_bloginfo('url') . "/wp-content/plugins/inline-google-docs/cache/error.log.php'><em>error.log.php</em></a> for assistance.") ?></p></div>
-		<?php
-	}*/
+	require_once ('inc/gdocs.php');
 	
 	// add installation hooks
 	register_activation_hook (__FILE__, 'gdocs_install');
