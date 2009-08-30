@@ -75,6 +75,7 @@ require_once ('gcache.php');
 require_once ('gdb.php');
 require_once ('gdisplay.php');
 require_once ('gfeed.php');
+require_once ('gelement.php');
 
 /**
  * Shortcode handler
@@ -91,118 +92,12 @@ function gdocs_display ($atts, $content=NULL){
 	if (is_null ($atts['type'])) return $content;
 	
 	try {
-		// e.g. gdocs_display_document ($atts);
-		$func = 'gdocs_display_' . $atts['type'];
-		return $func ($atts);
-		
+		return (String)GElement::getElement ($atts);
 	} catch (Exception $e) {
 		// any error at all, return text
 		return $content;
 	}
 	
-}
-
-/**
- * Secondary shortcode handler
- *
- * Retrieves and formats contents of the Google Document.
- * Keeps a copy in cache.
- * @param	array	$atts	contains attributes given by user in shortcode
- * @return	string	$html	html-formatted contents of the Google Document
- */
-function gdocs_display_document ($atts){
-
-	// check parameter exists
-	if (is_null ($atts['id'])) throw new Exception ();
-	
-	// print stylesheet <link>, not cached as the style attribute is variable
-	$html = isset ($atts['style']) ? GDisplay::printStylesheet ($atts['style']) : "";
-	
-	// try cache
-	$cache_session = new GCache ($atts['id']);
-	if ($cache_session->read ($doc)){
-		$html .= $doc;
-		return $html;
-	}
-	
-	/* Either cache failure, expired cache, or no cache */
-	
-	// get Http client
-	$gClient = GClient::getInstance (GDOCS_DOCUMENT);
-	
-	// connect to Google, get feed, markup
-	$doc = GDisplay::printDocTag ($atts['id'], $gClient->getDoc($atts['id']), $atts['style']);
-	
-	// keep a copy in cache
-	try {
-		$cache_session->write ($doc);
-	}catch (GCache_Exception $e){
-		gdocs_error ($e);
-	}
-	
-	$html .= $doc;
-	
-	// display
-	return $html;
-	
-}
-
-/**
- * Secondary shortcode handler
- *
- * Retrieves and formats contents of the Google Spreadsheet.
- * Keeps a copy in cache.
- * @param	array	$atts	contains attributes given by user in shortcode
- * @return	string	$html	html-formatted contents of the Google Spreadsheet
- */
-function gdocs_display_spreadsheet ($atts){
-
-	// check parameters exist
-	if (is_null ($atts['wt_id']) || is_null ($atts['st_id'])) throw new Exception ();
-	
-	// print stylesheet <link>, not cached as the style attribute is variable
-	$html = isset ($atts['style']) ? GDisplay::printStylesheet ($atts['style']) : "";
-	
-	// print tablesorter, not cached as well
-	if ($atts['sort']){
-		$params = $atts['sort'] === 'true' ? NULL : $atts['sort'];
-		$html .= GDisplay::printSortScript ($atts['st_id'], $atts['wt_id'], $params);
-	}
-	
-	// print table tag
-	$html .= GDisplay::printStTblTag ($atts['st_id'], $atts['wt_id'], $atts['style']);
-	
-	// try cache, retrieve table
-	$cache_session = new GCache ($atts['st_id'], $atts['wt_id']);
-	if ($cache_session->read ($tbl)){
-		$html .= $tbl;
-		return $html;
-	}
-	
-	/* Either cache failure, expired cache, or no cache */
-
-	// get GData client
-	$gsClient = GClient::getInstance (GDOCS_SPREADSHEET);
-	
-	// get list feed
-	$feed = $gsClient->getLists($atts['st_id'], $atts['wt_id']);
-	if (!$feed) throw new Exception ();
-	
-	// format
-	$tbl = GDisplay::printStTbl ($feed, $atts['headings']);
-	
-	// keep a copy in cache
-	try {
-		$cache_session->write ($tbl);
-	}catch (GCache_Exception $e){
-		gdocs_error ($e);
-	}
-	
-	$html .= $tbl;
-	
-	// display
-	return $html;
-
 }
 
 /**
