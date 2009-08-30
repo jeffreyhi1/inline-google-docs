@@ -115,9 +115,13 @@ function gdocs_display_document ($atts){
 	// check parameter exists
 	if (is_null ($atts['id'])) throw new Exception ();
 	
+	// print stylesheet <link>, not cached as the style attribute is variable
+	$html = isset ($atts['style']) ? GDisplay::printStylesheet ($atts['style']) : "";
+	
 	// try cache
 	$cache_session = new GCache ($atts['id']);
-	if ($cache_session->read ($html)){
+	if ($cache_session->read ($doc)){
+		$html .= $doc;
 		return $html;
 	}
 	
@@ -127,14 +131,16 @@ function gdocs_display_document ($atts){
 	$gClient = GClient::getInstance (GDOCS_DOCUMENT);
 	
 	// connect to Google, get feed, markup
-	$html = GDisplay::printDocTag ($atts['id'], $gClient->getDoc($atts['id']), $atts['style']);
+	$doc = GDisplay::printDocTag ($atts['id'], $gClient->getDoc($atts['id']), $atts['style']);
 	
 	// keep a copy in cache
 	try {
-		$cache_session->write ($html);
+		$cache_session->write ($doc);
 	}catch (GCache_Exception $e){
 		gdocs_error ($e);
 	}
+	
+	$html .= $doc;
 	
 	// display
 	return $html;
