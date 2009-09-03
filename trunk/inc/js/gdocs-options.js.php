@@ -87,54 +87,32 @@ var GDocsOptions = {
 		parents['document'] = $('gdocs_list_document').update ("");
 		parents['spreadsheet'] = $('gdocs_list_spreadsheet').update ("");
 		
-		var docs = json.docs;
+		// parse JSON
+		var docs = eval (transport.responseText);
 		
 		// populate table
-		var i;
-		for (i=0; i<docs.length && docs[i].type == 'document'; i++){
+		for (var i=0; i<docs.length; i++){
+		
 			var odd = i%2==0 ? ' odd' : 'even';
+			var ele = docs[i];
+			var type = ele.type;
+			delete ele.type;
+			
 			var tr = new Element ('tr').addClassName (odd);
-			tr.appendChild (new Element ('td').update (docs[i].title));
-			tr.appendChild (new Element ('td').update (docs[i].main_id));
-			parents[docs[i].type].appendChild (tr);
+			Object.values (ele).each (function (prop){
+				tr.appendChild (new Element ('td').update (prop));
+			});
+			
+			parents[type].appendChild (tr);
+			
 		};
 		
-		// collapse similar spreadsheets
-		var prev = null; var str = Array (); var j = 0;
-		for (i=i; i < docs.length && docs[i].type == 'spreadsheet'; i++){
-			if (prev) {			// not 1st element
-				if (docs[i].main_id == prev.main_id){
-					str.push (docs[i].sub_id);
-				}else {
-					var odd = j%2==0 ? ' odd' : 'even';
-					var tr = new Element ('tr').addClassName (odd);
-					tr.appendChild (new Element ('td').update (prev.title));
-					tr.appendChild (new Element ('td').update (prev.main_id));
-					tr.appendChild (new Element ('td').update (str.join (', ')));
-					parents[docs[i].type].appendChild (tr);
-					j++;
-					str = Array ();
-					str.push (docs[i].sub_id);
-				}
-			}else {
-				// 1st element
-				str.push (docs[i].sub_id);
-			}
-			prev = docs[i];
-		}
+		// update count
+		$$('code#dc span')[0].update (json.dc); $('dc').show();
+		$$('code#sc span')[0].update (json.sc); $('sc').show();
 		
-		// only entry or last entry
-		if (prev){
-			var odd = j%2==0 ? ' odd' : 'even';
-			var tr = new Element ('tr').addClassName (odd);
-			tr.appendChild (new Element ('td').update (prev.title));
-			tr.appendChild (new Element ('td').update (prev.main_id));
-			tr.appendChild (new Element ('td').update (str.join (', ')));
-			parents['spreadsheet'].appendChild (tr);
-		}
-		
-		if (json.db_error){
-			GDocsOptions._updateListException (null, json.db_error);
+		if (json.error){
+			GDocsOptions._updateListException (null, json.error);
 		}
 	
 	},

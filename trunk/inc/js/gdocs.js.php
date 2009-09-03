@@ -219,13 +219,17 @@ var GDocs = {
 		// clear
 		div.update ('');
 		
-		if (json.db_error){
+		if (json.error){
 			// database error
-			GDocs._updateListException (null, json.db_error);
+			GDocs._updateListException (null, json.error);
 		}
 		
+		
+		// parse JSON
+		var docs = eval (transport.responseText);
+		
 		// add tags
-		json.docs.each (function(ele){
+		docs.each (function(ele){
 		
 			var sub_title = ele.sub_title ? "<br/>[" + ele.sub_title + "]" : "";
 		
@@ -240,6 +244,11 @@ var GDocs = {
 			div.appendChild (span);
 		
 		});
+		
+		// update count
+		var c = $$('code#count span');
+		c[0].update (json.dc);
+		c[1].update (json.sc);
 	
 	},
 	

@@ -207,7 +207,7 @@ class GDisplay {
 	?>
 		<div id='gdocs_right'>
 			<!-- Document List -->
-			<h3>Google Documents</h3>
+			<h3>Google Documents <small><code id='dc' style='display:none'><span></span> documents</code></small></h3>
 			<small>Use the corresponding Document ID in your shortcode.<br />
 			<span style="color: blue">[gdocs id=<em>doc_id</em> type='document']</span></small>
 			<table class='hor-zebra'>
@@ -229,7 +229,7 @@ class GDisplay {
 		
 	?>
 			<!-- Spreadsheet List -->
-			<h3>Google Spreadsheets</h3>
+			<h3>Google Spreadsheets <small><code id='sc' style='display:none'><span></span> spreadsheets</code></small></h3>
 			<small>Use the corresponding Spreadsheet ID and Worksheet ID in your shortcode.<br />
 			<span style="color: blue">[gdocs st_id=<em>spreadsheet_id</em> wt_id=<em>worksheet_id</em> type='spreadsheet']</span></small>
 	
@@ -298,10 +298,23 @@ class GDisplay {
 	 */
 	public static function printHelper ($results){
 	
+		$html = ""; $doc_count = 0;
+	
+		if ($results) {
+			
+			foreach ($results as $row){
+				// <a href='#' onclick="javascript: GDocs.ring('MAIN_ID+SUB_ID', 'TYPE', 'TITLE'); return false;" id='MAIN_ID+SUB_ID+type'>
+				$sub = $row->sub_title ? "<br/>[" . $row->sub_title . "]" : "";
+				$html .= sprintf ("<span class='gdocs_%s'><a href='#' onclick=\"javascript: GDocs.ring ('%s+%s', '%s'); return false;\" id='%s+%s'>%s{$sub}</a></span>", $row->type, $row->main_id, $row->sub_id, $row->type, $row->main_id, $row->sub_id, $row->title, $row->sub_title);
+				if ($row->type === 'document') $doc_count++;
+			}
+			
+		}
+	
 	?>
 		<!-- Begin G Docs Helper -->
 		<style type='text/css'>
-			div#gdocs_helper span{
+			div#gdocs_helper .inside span{
 				display:block;
 				float:left;
 				margin:10px 0;
@@ -310,17 +323,21 @@ class GDisplay {
 				text-align:center;
 			}
 			
-			div#gdocs_helper span a{
+			div#gdocs_helper .inside span a{
 				position:relative;
 				top:80px;
 				line-height:1.3em;
 			}
 			
-			div#gdocs_helper img{
+			div#gdocs_helper .inside img{
 				border: 0 none;
 			}
 			div#gdocs_helper h3 a{
 				float: right;
+			}
+			div#gdocs_helper h3 small{
+				float: right;
+				padding-right: 10px;
 			}
 			
 			.gdocs_error {
@@ -356,26 +373,16 @@ class GDisplay {
 			}
 		</style>
 		<div id='gdocs_helper' class='postbox open'>
-			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/img/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets</h3>			
+			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/img/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets <small><code id='count'><span><?php echo $doc_count ?></span> documents | <span><?php echo (sizeof($results) - $doc_count) ?></span> worksheets</code></small></h3>			
 			<div class='inside'>
 				<noscript><div class='gdocs_error' id='gdocs_js_error' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("Enable Javascript to use this panel.") ?></strong></p></div></noscript>
 				<?php
-			
-			if ($results) {
-			
-				foreach ($results as $row){
-					// <a href='#' onclick="javascript: GDocs.ring('MAIN_ID+SUB_ID', 'TYPE', 'TITLE'); return false;" id='MAIN_ID+SUB_ID+type'>
-					$sub = $row->sub_title ? "<br/>[" . $row->sub_title . "]" : "";
-					printf ("<span class='gdocs_%s'><a href='#' onclick=\"javascript: GDocs.ring ('%s+%s', '%s'); return false;\" id='%s+%s'>%s{$sub}</a></span>", $row->type, $row->main_id, $row->sub_id, $row->type, $row->main_id, $row->sub_id, $row->title, $row->sub_title);
-				}
-				
-			}else {
-			?>
+				if ($results) echo $html; 
+				else {
+				?>
 				<div class='gdocs_error' id='message' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The plugin was unable to connect to the database. Refresh this box to see the list of documents and spreadsheets available.") ?></strong></p></div>
-			<?php
-			}
-			
-			?></div>
+				<?php } ?>
+			</div>
 			<div style="clear:both"></div>
 		</div>
 		<!-- End G Docs helper -->

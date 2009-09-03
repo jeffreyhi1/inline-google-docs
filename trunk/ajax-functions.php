@@ -56,7 +56,7 @@ if (isset($_GET['action'])){
 	$func = 'gdocs_' . $action;
 	
 	try {
-		$func ();
+		@$func ();
 	} catch (Zend_Http_Client_Adapter_Exception $e){
 		// connnection problem , probably proxy
 		$error = "A connection error has occurred. Are you behind a proxy?";
@@ -81,12 +81,12 @@ if (isset($_GET['action'])){
 		$error = "A HTTP error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
 		header ('HTTP/1.0 502 Bad Gateway');
 		header('X-JSON: (' . json_encode ($error) . ')');
-		gdocs_error ($e);
+		@gdocs_error ($e);
 	} catch (Exception $e){
 		$error = "An error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
 		header ('HTTP/1.0 400 Bad Request');
 		header('X-JSON: (' . json_encode ($error) . ')');
-		gdocs_error ($e);
+		@gdocs_error ($e);
 	}
 }else {
 	// missing paramter
@@ -108,32 +108,38 @@ if (isset($_GET['action'])){
 function gdocs_update_list (){
 	
 	// get Google Documents client
-	@$gdClient = GClient::getInstance(GDOCS_DOCUMENT);
+	$gdClient = GClient::getInstance(GDOCS_DOCUMENT);
 	
 	// initialize collector stack
 	$docs = array();
 	
 	// update document list
-	@gdocs_update_documents ($gdClient, &$docs);
+	gdocs_update_documents ($gdClient, &$docs);
+	$doc_count = sizeof ($docs);
 	
 	// get Google Spreadsheets client
-	@$gsClient = GClient::getInstance(GDOCS_SPREADSHEET);
+	$gsClient = GClient::getInstance(GDOCS_SPREADSHEET);
 	
 	// update spreadsheet list
-	@gdocs_update_sts ($gdClient, $gsClient, &$docs);
+	gdocs_update_sts ($gdClient, $gsClient, &$docs);
+	$st_count = sizeof ($docs) - $doc_count;
 	
-	$json = array ('docs' => $docs);
+	header ('HTTP/1.0 200 OK');
+	header ('Content-Type: application/x-json');
+	
+	$json = array ('dc' => $doc_count, 'sc' => $st_count);
 	
 	// update DB
 	try {
 		GDB::write ($docs);
 	} catch (GDB_Exception $e){
-		$json['db_error'] = $e->getMessage();
-		@gdocs_error ($e);
+		$json['error'] = $e->getMessage();
+		gdocs_error ($e);
 	}
 	
-	// return json data
-	header('X-JSON: (' . json_encode ($json) . ')');
+	header ('X-JSON: (' . json_encode ($json) . ')');
+	
+	echo json_encode ($docs);
 	
 }
 
@@ -162,6 +168,8 @@ function gdocs_update_documents (GClient_Doc $gdClient, array $docs){
  */
 function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $docs){
 
+	$obj = strpos ($_SERVER['HTTP_REFERER'], 'options-general.php') === FALSE ? FALSE : TRUE;
+
 	// get spreadsheets feed
 	$feed = $gdClient->getSpreadsheets ();
 	
@@ -171,19 +179,36 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 			// get worksheets feed
 			$wtFeed = $gsClient->getWorksheets ($entry->main_id);
 					
-			if ($wtFeed) foreach ($wtFeed->entries as $wtEntry){
+			if ($wtFeed){ 
 			
-				// extract worksheet id
-				$wtId = split ('/', $wtEntry->getId()->getText());
-				$entry->sub_id = $wtId[8];
+				$worksheets = array ();
+				$sub_ids = array ();
+				foreach ($wtFeed->entries as $wtEntry){
 				
-				// extract worksheet title
-				$entry->sub_title = $wtEntry->getTitleValue ();
+					// extract worksheet id
+					$wtId = split ('/', $wtEntry->getId()->getText());
+					$entry->sub_id = $wtId[8];
+					
+					// extract worksheet title
+					$entry->sub_title = $wtEntry->getTitleValue ();
+					
+					// push to stack
+					$worksheets[] = clone $entry;
+					$sub_ids[] = $entry->sub_id;
+					
+				}
 				
-				// push to stack
-				$docs[] = clone $entry;
+				if ($obj && sizeof ($worksheets) >= 1){
+					$ele = $worksheets[0];
+					$ele->sub_id = implode (', ', $sub_ids);
+					unset ($ele->sub_title);
+					$docs[] = $ele;
+				}else {
+					$docs = array_merge ($docs, $worksheets);				
+				}
 				
 			}
+			
 		}catch (Zend_Gdata_App_HttpException $e){
 			$res = $e->getResponse();
 			if ($res->getStatus() === 403){ // Forbidden
@@ -194,6 +219,7 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 		}
 
 	}
+	
 }
 
 /**
