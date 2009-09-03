@@ -53,7 +53,7 @@ define ('GDOCS_PATH', realpath (ABSPATH . 'wp-content/plugins/' . dirname(plugin
  * Web path to this plugin
  * @name	GDOCS_ADDRESS
  */
-define ('GDOCS_ADDRESS', get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH));
+define ('GDOCS_ADDRESS', get_bloginfo ('wpurl') . '/wp-content/plugins/' . basename (GDOCS_PATH));
 
 // add Zend library to path
 $path = GDOCS_PATH . "/library";
@@ -232,9 +232,9 @@ add_shortcode ('gdocs', 'gdocs_display');
 global $pagenow;
 $wp_pages = array ('post.php', 'post-new.php', 'page.php', 'page-new.php');
 if (in_array ($pagenow, $wp_pages)){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs.js.php?url=' . GDOCS_ADDRESS, array ('prototype'));
 }else if ($pagenow == 'options-general.php' && $_GET['page'] === 'gdocs.php'){
-	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs-options.js.php?url=' . get_bloginfo ('url') . '/wp-content/plugins/' . basename (GDOCS_PATH), array ('prototype'));
+	wp_enqueue_script ('gdocs', '/wp-content/plugins/' . basename (GDOCS_PATH) . '/inc/js/gdocs-options.js.php?url=' . GDOCS_ADDRESS, array ('prototype'));
 }
 
 // add post/page view javascript (tablesorter.js, jquery)
