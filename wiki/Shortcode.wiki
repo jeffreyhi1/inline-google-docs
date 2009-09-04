@@ -4,7 +4,7 @@
 
 ||<strong>Type</strong>||<strong>Required Attributes</strong>||<strong>Optional Attributes</strong>||
 ||Document||[#type type], [#id id]||[#style style]||
-||Spreadsheet||[#type type], [#st_id st_id], [#wt_id wt_id]||[#headings headings], [#sort sort], [#style style]||
+||Spreadsheet||[#type type], [#st_id st_id], [#wt_id wt_id]||[#style style], [#headings headings], [#sort sort]||
 ||Cell||[#type type], [#st_id st_id], [#wt_id wt_id], [#cell_id cell_id]||[#style style]||
 
 
