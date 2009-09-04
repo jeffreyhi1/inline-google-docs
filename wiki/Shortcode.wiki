@@ -93,7 +93,7 @@ Cell coordinates in the worksheet. Specify in the form `R<row>C<col>`. For examp
 {{{
 [gdocs cell_id='R2C2' ...]
 }}}
-displays the cell in the second row and second column and the specified worksheet.
+displays the cell in the second row and second column of the specified worksheet.
 
 == headings ==
 _comma-separated values_
