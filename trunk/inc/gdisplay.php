@@ -546,6 +546,27 @@ class GDisplay {
 	}
 	
 	/**
+	 * Formats <span> tag for cell
+	 * @param	string	$st_id		Spreadsheet ID
+	 * @param	string	$wt_id		Worksheet ID
+	 * @param	string	$cell_id	Cell ID
+	 * @param	string	$style		Style classes to include
+	 */
+	public static function printCellTag ($st_id, $wt_id, $cell_id, $style=NULL){
+		$classes = preg_split ("/,(\s)?/", $style);
+		$classes = implode (' ', $classes);
+		return "<span class='gdocs {$classes}' id='gdocs_{$st_id}_{$wt_id}_{$cell_id}'>";
+	}
+	
+	/**
+	 * Formats contents of spreadsheet cell for display
+	 */
+	public static function printCell (Zend_Gdata_Feed $feed){
+		$entry = new Zend_Gdata_Spreadsheets_CellEntry ($feed[0]->getDOM());
+		return $entry->getCell()->getText() . "</span>";
+	}
+	
+	/**
 	 * Prints stylesheet <link>
 	 * @param	string	$style	Style classes for this spreadsheet
 	 * @return	string	$html	<style> tag to add to the HTML output

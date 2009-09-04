@@ -48,6 +48,9 @@ abstract class GElement {
 			case 'spreadsheet':
 				return new GSt ($atts);
 				break;
+			case 'cell':
+				return new GCell ($atts);
+				break;
 			default:
 				throw new Exception ();
 		}
@@ -84,7 +87,7 @@ abstract class GElement {
 			// no cache or cache expired
 			$body = $this->printBody ();
 			$this->html .= $body;
-			
+						
 			try {
 				// write to cache
 				$this->cache_session->write ($body);
@@ -247,6 +250,66 @@ class GSt extends GElement{
 		return GDisplay::printStTbl ($feed, $this->atts['headings']);
 	}
 
+}
+
+/**
+ * Cell in Google Spreadsheet
+ * @author		Lim Jiunn Haur <codex.is.poetry@gmail.com>
+ * @copyright	Copyright (c) 2008, Lim Jiunn Haur
+ * @license		http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @package		gdocs
+ * @subpackage	gdocs.inc
+ * @since		0.9
+ * @version		0.9
+ */
+class GCell extends GElement {
+
+	/**
+	 * Constructor
+	 * @param	array	$atts	Shortcode attributes
+	 * @return	GSt		$obj	GDoc element
+	 */
+	public function __construct ($atts){
+		$this->cache_session = new GCache ($atts['st_id'], $atts['wt_id'], $atts['cell_id']);
+		parent::__construct ($atts);
+	}
+	
+	/**
+	 * Check required parameters exist, throws Exception otherwise
+	 */
+	protected function checkRequired (){
+		if (is_null ($this->atts['wt_id']) || is_null ($this->atts['st_id']) || is_null ($this->atts['cell_id'])) throw new Exception ();
+	}
+	
+	/**
+	 * Print tablesorter script
+	 */
+	protected function printScripts (){
+		return "";
+	}
+	
+	/**
+	 * Print <table> tag
+	 */
+	protected function openTag (){
+		return GDisplay::printCellTag ($this->atts['st_id'], $this->atts['wt_id'], $this->atts['cell_id'], $this->atts['style']);
+	}
+	
+	/**
+	 * Print table
+	 */
+	protected function printBody (){
+		// get GData client
+		$gClient = GClient::getInstance (GDOCS_SPREADSHEET);
+		
+		// get cell entry
+		$entry= $gClient->getCell($this->atts['st_id'], $this->atts['wt_id'], $this->atts['cell_id']);
+		if (!$entry) throw new Exception ();
+		
+		// format
+		return GDisplay::printCell ($entry);
+	}
+	
 }
 
 class GElementException extends Exception {

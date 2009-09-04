@@ -121,7 +121,7 @@ function gdocs_update_list (){
 	$gsClient = GClient::getInstance(GDOCS_SPREADSHEET);
 	
 	// update spreadsheet list
-	gdocs_update_sts ($gdClient, $gsClient, &$docs);
+	$data = gdocs_update_sts ($gdClient, $gsClient, &$docs);
 	$st_count = sizeof ($docs) - $doc_count;
 	
 	header ('HTTP/1.0 200 OK');
@@ -131,7 +131,7 @@ function gdocs_update_list (){
 	
 	// update DB
 	try {
-		GDB::write ($docs);
+		GDB::write ($data);
 	} catch (GDB_Exception $e){
 		$json['error'] = $e->getMessage();
 		gdocs_error ($e);
@@ -172,6 +172,7 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 
 	// get spreadsheets feed
 	$feed = $gdClient->getSpreadsheets ();
+	$dataArr = array_values ($docs);
 	
 	foreach ($feed as $entry){
 		
@@ -198,15 +199,15 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 					
 				}
 				
+				$dataArr = array_merge ($dataArr, $worksheets);
+				
 				if ($obj && sizeof ($worksheets) >= 1){
-					$ele = $worksheets[0];
+					$ele = clone $worksheets[0];
 					$ele->sub_id = implode (', ', $sub_ids);
 					unset ($ele->sub_title);
 					$docs[] = $ele;
-				}else {
-					$docs = array_merge ($docs, $worksheets);				
 				}
-				
+								
 			}
 			
 		}catch (Zend_Gdata_App_HttpException $e){
@@ -217,8 +218,12 @@ function gdocs_update_sts (GClient_Doc $gdClient, GClient_St $gsClient, array $d
 			}
 			throw $e;
 		}
+		
+		if (!$obj) $docs = $dataArr;
 
 	}
+	
+	return $dataArr;
 	
 }
 

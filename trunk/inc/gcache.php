@@ -129,6 +129,9 @@ class GCache {
 				// Google Spreadsheet
 				return $this->dir . $this->cleanFilename (GDOCS_SPREADSHEET . "_".$atts[0]."_".$atts[1].".html");
 				break;
+			case 3:
+				// Cell in Google Spreadsheet
+				return $this->dir . $this->cleanFilename (GDOCS_CELL . "_".$atts[0]."_".$atts[1]."_".$atts[2].".html");
 		}
 	}
 	

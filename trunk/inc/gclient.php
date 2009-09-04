@@ -222,6 +222,27 @@ class GClient_St extends GClient {
 		return $this->getFeed ("http://spreadsheets." . parent::DOMAIN . "/feeds/list/{$st_id}/{$wt_id}/private/full");
 	}
 	
+	/**
+	 * Retrieve a particular cell
+	 * @param	string								$st_id	Spreadsheet ID
+	 * @param	string								$wt_id	Worksheet ID
+	 * @return	Zend_Gdata_Spreadsheets_CellEntry	$entry	CellEntry object containing cell data
+	 */
+	public function getCell ($st_id, $wt_id, $cell_id){
+		$query = new Zend_Gdata_Spreadsheets_CellQuery ();
+		$query->setSpreadsheetKey ($st_id);
+		$query->setWorksheetId ($wt_id);
+		
+		// parse cell id
+		if (strlen ($cell_id) != 4) throw new Exception ();
+		$row = $cell_id[1];
+		$col = $cell_id[3];
+		
+		$query->setMaxRow($row)->setMinRow($row)->setMaxCol($col)->setMinCol($col);
+		
+		return $this->getFeed ($query->getQueryUrl());
+	}
+	
 }
 
 ?>
