@@ -43,6 +43,10 @@ define ('GDOCS_DOCUMENT', 'doc');
  */
 define ('GDOCS_SPREADSHEET', 'st');
 /**
+ * @name	GDOCS_CELL
+ */
+define ('GDOCS_CELL', 'cell');
+/**
  * Absolute path to this plugin
  * 
  * Plugin folder = basename (GDOCS_PATH)
