@@ -1,12 +1,11 @@
 #summary Shortcode Reference
 
-_Warning: This is still a draft_
-
 = gdocs =
 
 ||<strong>Type</strong>||<strong>Required Attributes</strong>||<strong>Optional Attributes</strong>||
 ||Document||[#type type], [#id id]||[#style style]||
 ||Spreadsheet||[#type type], [#st_id st_id], [#wt_id wt_id]||[#headings headings], [#sort sort], [#style style]||
+||Cell||[#type type], [#st_id st_id], [#wt_id wt_id], [#cell_id cell_id]||[#style style]||
 
 
 General syntax:
@@ -14,7 +13,7 @@ General syntax:
 [gdocs]default text[/gdocs]
 }}}
 
-Wordpress will parse the above shortcode and pass the attributes to the plugin. If the plugin fails to retrieve the document/spreadsheet from Google, it will display the text within the `gdocs` tags.
+Wordpress will parse the above shortcode and pass the attributes to the plugin. If the plugin fails to retrieve the document/spreadsheet from Google, it will display the text within the `gdocs` tags. Note that there must be at least one space between shortcodes.
 
 == Examples ==
 {{{
@@ -85,6 +84,16 @@ Google generated worksheet ID. Available at plugin configuration page.
 {{{
 [gdocs wt_id='od6' ...]
 }}}
+
+== cell_id ==
+*Required for cells* <br/>
+_string_ `R<row>C<col>`
+
+Cell coordinates in the worksheet. Specify in the form `R<row>C<col>`. For example, the following
+{{{
+[gdocs cell_id='R2C2' ...]
+}}}
+displays the cell in the second row and second column and the specified worksheet.
 
 == headings ==
 _comma-separated values_
