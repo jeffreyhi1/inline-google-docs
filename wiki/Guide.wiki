@@ -9,12 +9,18 @@ After you have installed the plugin, go to the *Write Page* or *Write Post* form
 {{{
 [gdocs id='<doc-id>' type='document']
 }}}
-or
+
 {{{
 [gdocs st_id='<spreadsheet-id>' wt_id='<worksheet-id>' type='spreadsheet']
 }}}
+or
+{{{
+[gdocs st_id='<spreadsheet-id>' wt_id='<worksheet-id>' cell_id='<cell-id>' type='cell']
+}}}
 
 Replace `<doc-id>`, `<spreadsheet-id>`, and `<worksheet-id>` with the ID of the document or worksheet that you wish to embed. The ID’s are available at the plugin’s configuration page. Don't forget to enclose them in quotes.
+
+When embedding a single cell, specify the coordinates of the cell in the worksheet as `R<row number>C<column number`, such as `R6C4` for the cell in the sixth row and fourth column of the worksheet.
 
 For example, the following shortcode:<br/>
 http://img188.imageshack.us/img188/2062/posttextarea.png
