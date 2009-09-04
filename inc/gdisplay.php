@@ -92,15 +92,15 @@ class GDisplay {
 		<div id='gdocs_left'>
 			<form method='post' action='options.php'>
 				<?php
-					if (function_exists ('settings_fields')){
-						settings_fields ('gdocs-options');
-					}else {
+				if (function_exists ('settings_fields')){
+					settings_fields ('gdocs-options');
+				}else {
 				?>
 				<input type="hidden" name="action" value="update" />
-				<input type="hidden" name="page_options" value="gdocs_user,gdocs_pwd,gdocs_proxy_host,gdocs_proxy_port,gdocs_proxy_user,gdocs_proxy_pwd, gdocs_cache_expiry" />
+				<input type="hidden" name="page_options" value="gdocs_user,gdocs_pwd,gdocs_proxy_host,gdocs_proxy_port,gdocs_proxy_user,gdocs_proxy_pwd,gdocs_cache_expiry,gdocs_style_dir" />
 				<?php 
-						wp_nonce_field ('update-options');	
-					}
+					wp_nonce_field ('update-options');	
+				}
 				?>
 			
 	<?php
@@ -139,7 +139,7 @@ class GDisplay {
 	
 				<!-- Proxy Settings -->
 				<h3>Proxy Settings</h3>
-				<span class='description'>Leave this blank if your host is not behind a proxy.</span>
+				<span class='description'>Leave this section blank if your host is not behind a proxy.</span>
 				<table class='form-table'>
 					<tbody>
 						<tr valign="top">
@@ -181,6 +181,26 @@ class GDisplay {
 					</tbody>
 				</table>
 	
+	<?php
+	}
+	
+	/**
+	 * Prints style settings input form
+	 */
+	public static function printStyle (){
+	?>
+				
+				<!-- Stylesheet Settings -->
+				<h3>Stylesheet Settings</h3>
+				<table class='form-table'>
+					<tbody>
+						<tr valign='top'>
+							<th scope='row'><label for='gdocs_style_dir'>Directory</label></th>
+							<td><span class='description'><?php bloginfo ('wpurl')?>/</span><input type='text' size="30" id="gdocs_style_dir" name="gdocs_style_dir" value="<?php echo get_option ('gdocs_style_dir'); ?>" /><br /><span class='description'><strong>Specify the directory where you keep your CSS stylesheets in.</strong></span></td>
+						</tr>
+					</tbody>
+				</table>
+				
 	<?php
 	}
 	
@@ -535,6 +555,13 @@ class GDisplay {
 		// split style classes
 		$classes = preg_split ("/,(\s)?/", $style);
 		
+		// parse gdocs_style_dir option
+		$dir = get_option ('gdocs_style_dir');
+		if ($dir){
+			if ($dir[strlen ($dir) -1] !== "/") $dir .= "/";	// if no ending slash, add ending slash
+			if ($dir[0] !== "/") $dir = "/" . $dir;				// if no starting slash, add starting slash
+		}
+		
 		$html = "";
 		
 		foreach ($classes as $class){
@@ -542,7 +569,13 @@ class GDisplay {
 			if (in_array ($class, self::$stylesheets)) continue;
 			self::$stylesheets[] = $class;
 			
-			if (file_exists (GDOCS_PATH . "/styles/{$class}.css")){
+			if (file_exists (ABSPATH . $dir . "{$class}.css")){
+				$path = get_bloginfo ('wpurl') . $dir . "{$class}.css";
+				$html .= "<link href='{$path}' rel='stylesheet' type='text/css' />\r\n";
+			}else if (file_exists (ABSPATH . $dir . "{$class}/{$class}.css")) {
+				$path = get_bloginfo ('wpurl') . $dir . "{$class}/{$class}.css";
+				$html .= "<link href='{$path}' rel='stylesheet' type='text/css' />\r\n";
+			}else if (file_exists (GDOCS_PATH . "/styles/{$class}.css")){
 				$path = GDOCS_ADDRESS . "/styles/{$class}.css";
 				$html .= "<link href='{$path}' rel='stylesheet' type='text/css' />\r\n";
 			}else if (file_exists (GDOCS_PATH . "/styles/{$class}/{$class}.css")) {

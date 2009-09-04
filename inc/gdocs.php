@@ -105,7 +105,7 @@ function gdocs_display ($atts, $content=NULL){
  */
 function gdocs_admin (){
 	if (function_exists ('register_setting')){
-		$options = array ("gdocs_user","gdocs_pwd","gdocs_proxy_host","gdocs_proxy_port","gdocs_proxy_user","gdocs_proxy_pwd", "gdocs_cache_expiry");
+		$options = array ("gdocs_user","gdocs_pwd","gdocs_proxy_host","gdocs_proxy_port","gdocs_proxy_user","gdocs_proxy_pwd", "gdocs_cache_expiry", "gdocs_style_dir");
 		foreach ($options as $option){
 			register_setting ('gdocs-options', $option);
 		}
@@ -143,6 +143,7 @@ function gdocs_options_setup (){
 	GDisplay::printHead ();	
 	GDisplay::printLogin ();
 	GDisplay::printCache ();
+	GDisplay::printStyle ();
 	GDisplay::printProxy ();
 	GDisplay::printFoot ();
 	
@@ -188,6 +189,9 @@ function gdocs_install (){
 	// cache config
 	add_option ('gdocs_cache_expiry', 0);
 	
+	// stylesheets config
+	add_option ('gdocs_style_dir');
+	
 	// create table in DB to store shortcode tags
 	try {
 		GDB::drop ();
@@ -212,6 +216,7 @@ function gdocs_uninstall (){
 	delete_option ('gdocs_proxy_user');
 	delete_option ('gdocs_proxy_pwd');
 	delete_option ('gdocs_cache_expiry');
+	delete_option ('gdocs_style_dir');
 	
 	// remove table from DB
 	GDB::drop ();
