@@ -1,4 +1,5 @@
 #summary Shortcode Reference
+#labels Featured,Phase-Deploy
 
 = gdocs =
 
