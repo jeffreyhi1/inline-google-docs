@@ -12,14 +12,10 @@
  * @author		Lim Jiunn Haur <codex.is.poetry@gmail.com>
  * @copyright	Copyright (c) 2008, Lim Jiunn Haur
  * @license		http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version		0.8
+ * @version		0.9
  * @package		gdocs
  * @subpackage	gdocs.inc
- * @todo bugs
- * - CAPTCHA
  * @todo
- * - new ideas (single cell etc)
- * - brainstorm, research google api
  * - presentations, files, others, forms
  * - multipage feeds
  * - image caching

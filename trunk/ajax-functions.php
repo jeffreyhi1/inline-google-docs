@@ -11,7 +11,7 @@
  * @license		http://opensource.org/licenses/gpl-license.php GNU Public License
  * @package		gdocs
  * @since		0.5
- * @version		0.7
+ * @version		0.9
  */
 
 /**

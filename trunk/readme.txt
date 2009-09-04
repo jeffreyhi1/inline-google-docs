@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=codex
 Tags: google, documents, gdoc, inline, embed, spreadsheets
 Requires at least: 2.5
 Tested up to: 2.8.3
-Stable tag: 0.8
+Stable tag: 0.9
 
 This plugin allows you to embed Google Document/Spreadsheet content in posts and pages using shortcode.
 
@@ -92,6 +92,26 @@ For example, suppose you would like to define a new class named _my-class_ for y
 
 If you need to use images, create a new folder in `inline-google-docs/styles` and move _my-class.css_ as well as all your images into this folder. Name this folder after your class.
 
+####Table Sorter####
+Inline Google Docs now includes [tablesorter](http://tablesorter.com)!
+
+To use tablesorter without passing any parameters, set `sort` to `true` in your shortcode, as follows:
+
+        [gdocs ... sort="true"]
+
+To pass simple parameters to tablesorter, simply include them within braces in the `sort` attribute, as follows:
+
+        [gdocs ... sort="{cancelSelection:false,...}"]
+
+Certain characters, such as square brackets, will confuse the shortcode parser. If you have complex parameters, pass them through a Javascript variable, as follows:
+
+        <script type='text/javascript'>
+          var properties = {cancelSelection:false, sortList:[[1,1]]};
+        </script>
+        [gdocs type='spreadsheet' st_id='twRDk9_BEs9E6Jevb82ETvw' wt_id='od7' style='tablesorter' sort="properties" headings='A, B, C, D, E, F, G, H']
+
+v0.8 also includes the default blue theme; set `style` to `tablesorter` to use it to style your tables. 
+
 ####Supported Browsers####
 This plugin has been tested on IE 7, IE 8, Chrome, Firefox 2, Firefox 3, Firefox 3.5, Opera 9, and Safari 3. If you are using another browser, please update this [wiki](http://code.google.com/p/inline-google-docs/wiki/Guide) if it works and post a new issue if it doesn't.
 
@@ -142,6 +162,19 @@ No, it doesn't.
 As of v0.7, all rows and columns have an additional class that marks it as even or odd. Use these to create alternating patterns.
 
 == Changelog ==
+
+#### v0.9
+
+1. Capability to embed single cell added
+1. Capability to import stylesheets from user-specified directory added
+1. Bug caused by Wordpress URL fixed
+1. Document styling added
+1. Custom classes for documents and spreadsheets added
+1. Other minor bug fixes
+
+#### v0.8
+
+1. Critical fix for "Zend not found"
 
 #### v0.7.5
 

@@ -3,7 +3,7 @@
 Plugin Name: Inline Google Docs
 Plugin URI: http://code.google.com/p/inline-google-docs/
 Description: Inline Google Docs allows the user to display contents of his google documents in his pages/posts, using shortcode for markup. Requires PHP 5, Prototype, and jQuery.
-Version: 0.8
+Version: 0.9
 Author: Lim Jiunn Haur
 Author URI: http://broken-watch.info/
 */
@@ -33,7 +33,7 @@ Author URI: http://broken-watch.info/
  * @author		Lim Jiunn Haur <codex.is.poetry@gmail.com>
  * @copyright	Copyright (c) 2008, Lim Jiunn Haur
  * @license		http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version		0.8
+ * @version		0.9
  * @package		gdocs
  */
 

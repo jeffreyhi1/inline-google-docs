@@ -9,7 +9,7 @@
  * @package		gdocs
  * @subpackage	gdocs.inc
  * @since		0.5
- * @version		0.7
+ * @version		0.9
  */
 $url = NULL;
 if (isset ($_GET ['url'])){
