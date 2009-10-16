@@ -15,88 +15,82 @@
  */
 
 /**
- * Loads Wordpress configuration options.
+ * Overall AJAX handler
+ *
+ * This is the only entry point. Checks user permissions and request parameters.
+ * Redirects to appropriate function.
  */
-require_once ('../../../wp-config.php');
-/**
- * Loads WP database functions.
- */
-require_once ('../../../wp-includes/wp-db.php');
-/**
- * Loads WP formatting functions.
- */
-require_once ('../../../wp-includes/formatting.php');
-
-##################### BEGIN Global Execution Space ################################
-
-header ('Cache-Control: no-cache');
-
-/**
- * Data regarding current user
- * @global	mixed	object containing user data
- * @name	$userdata
- */
-global $userdata;
-get_currentuserinfo();
-
-if ($userdata->user_level < 8){
-	// insufficient rights
-	header ('HTTP/1.0 403 Forbidden');
-	$error = 'You do not have sufficient access rights to use this plugin.';
-	header('X-JSON: (' . json_encode ($error) . ')');
-	return NULL;
-}
-
-// check if action is set
-$action = NULL;
-if (isset($_GET['action'])){
-	$action = $_GET['action'];
+function gdocs_ajax_handler (){
+	/**
+	 * Data regarding current user
+	 * @global	mixed	object containing user data
+	 * @name	$userdata
+	 */
+	global $userdata;
+	get_currentuserinfo();
 	
-	// execute
-	$func = 'gdocs_' . $action;
-	
-	try {
-		@$func ();
-	} catch (Zend_Http_Client_Adapter_Exception $e){
-		// connnection problem , probably proxy
-		$error = "A connection error has occurred. Are you behind a proxy?";
-		header ('HTTP/1.0 400 Bad Request');
+	if ($userdata->user_level < 8){
+		// insufficient rights
+		header ('HTTP/1.0 403 Forbidden');
+		$error = 'You do not have sufficient access rights to use this plugin.';
 		header('X-JSON: (' . json_encode ($error) . ')');
-	} catch (Zend_Gdata_App_CaptchaRequiredException $e){
-		// google requested captcha
-		$error = GDisplay::printCaptchaError ($e);
-		header ('HTTP/1.0 400 Bad Request');
-		header('X-JSON: (' . json_encode ($error) . ')');
-	} catch (Zend_Gdata_App_AuthException $e) {
-		// google docs login problem
-		if (!get_option ('gdocs_user') || !get_option ('gdocs_pwd')){ 
-			$error = "Please enter your username and password in the plugin configuration form under <em>Settings</em>.";
-		}else { 
-			$error = "The plugin was unable to login to the Google service. Did you give us the wrong password/username?";
-		}
-		header ('HTTP/1.0 400 Bad Request');
-		header('X-JSON: (' . json_encode ($error) . ')');
-	} catch (Zend_Gdata_App_HttpException $e){
-		// HTTP Error
-		$error = "A HTTP error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
-		header ('HTTP/1.0 502 Bad Gateway');
-		header('X-JSON: (' . json_encode ($error) . ')');
-		@gdocs_error ($e);
-	} catch (Exception $e){
-		$error = "An error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
-		header ('HTTP/1.0 400 Bad Request');
-		header('X-JSON: (' . json_encode ($error) . ')');
-		@gdocs_error ($e);
+		die ();
+		return NULL;
 	}
-}else {
-	// missing paramter
-	$error = "Required parameters missing.";
-	header ('HTTP/1.0 400 Bad Request');
-	header('X-JSON: (' . json_encode ($error) . ')');
-	return NULL;
-}
+	
+	// check if action is set
+	$action = NULL;
+	if (isset($_POST['method'])){
+		$action = $_POST['method'];
+		
+		// execute
+		$func = 'gdocs_' . $action;
+		
+		try {
+			@$func ();
+		} catch (Zend_Http_Client_Adapter_Exception $e){
+			// connnection problem , probably proxy
+			$error = "A connection error has occurred. Are you behind a proxy?";
+			header ('HTTP/1.0 400 Bad Request');
+			header('X-JSON: (' . json_encode ($error) . ')');
+		} catch (Zend_Gdata_App_CaptchaRequiredException $e){
+			// google requested captcha
+			$error = GDisplay::printCaptchaError ($e);
+			header ('HTTP/1.0 400 Bad Request');
+			header('X-JSON: (' . json_encode ($error) . ')');
+		} catch (Zend_Gdata_App_AuthException $e) {
+			// google docs login problem
+			if (!get_option ('gdocs_user') || !get_option ('gdocs_pwd')){ 
+				$error = "Please enter your username and password in the plugin configuration form under <em>Settings</em>.";
+			}else { 
+				$error = "The plugin was unable to login to the Google service. Did you give us the wrong password/username?";
+			}
+			header ('HTTP/1.0 400 Bad Request');
+			header('X-JSON: (' . json_encode ($error) . ')');
+		} catch (Zend_Gdata_App_HttpException $e){
+			// HTTP Error
+			$error = "A HTTP error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
+			header ('HTTP/1.0 502 Bad Gateway');
+			header('X-JSON: (' . json_encode ($error) . ')');
+			@gdocs_error ($e);
+		} catch (Exception $e){
+			$error = "An error has occurred: " . $e->getMessage() . ". Please contact the plugin author with <a href='" . GDOCS_ADDRESS . "/cache/error.log.php'><em>error.log.php</em></a> for assistance.";
+			header ('HTTP/1.0 400 Bad Request');
+			header('X-JSON: (' . json_encode ($error) . ')');
+			@gdocs_error ($e);
+		}
+	}else {
+		// missing paramter
+		$error = "Required parameters missing.";
+		header ('HTTP/1.0 400 Bad Request');
+		header('X-JSON: (' . json_encode ($error) . ')');
+		die ();
+		return NULL;
+	}
+	
+	die ();
 
-##################### END Global Execution Space ##################################
+}
  
 /**
  * Updates list of Google Documents and Spreadsheets

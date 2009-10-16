@@ -31,9 +31,9 @@ var GDocsOptions = {
 	init: function (){
 	
 		// call php script to retrieve list of documents and spreadsheets
-		new Ajax.Request ('<?php echo $url ?>/ajax-functions.php', {
-			method: 'get',
-			parameters: {action: 'update_list'},
+		new Ajax.Request ("<?php echo ($url . "/../../../"); ?>/wp-admin/admin-ajax.php", {
+			method: 'post',
+			parameters: {action: 'gdocs_ajax_handler', method: 'update_list'},
 			onSuccess: function (transport, json){
 				GDocsOptions._updateListHTML (transport, json);
 			},
@@ -55,10 +55,14 @@ var GDocsOptions = {
 		Element.extend (ele);	
 		ele.setAttribute ('value', 'Verifying...');
 		
+		var args = ele.up().serialize (true);
+		args['action'] = 'gdocs_ajax_handler';
+		args['method'] = 'verify';
+		
 		// call php script to verify with Google
-		new Ajax.Request ('<?php echo $url ?>/ajax-functions.php?action=verify', {
+		new Ajax.Request ("<?php echo ($url . "/../../../"); ?>/wp-admin/admin-ajax.php", {
 			method: 'post',
-			parameters: ele.up().serialize(true),
+			parameters: args,
 			onSuccess: function (transport, json){
 				GDocsOptions._clearListExceptions ();
 				GDocsOptions._updateListHTML (transport, json);

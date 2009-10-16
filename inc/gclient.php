@@ -233,12 +233,15 @@ class GClient_St extends GClient {
 		$query->setSpreadsheetKey ($st_id);
 		$query->setWorksheetId ($wt_id);
 		
-		// parse cell id
-		if (strlen ($cell_id) != 4) throw new Exception ();
-		$row = $cell_id[1];
-		$col = $cell_id[3];
+		/*
+		 * Parse cell id
+		 */
+		// min length is 4
+		if (strlen ($cell_id) < 4) throw new Exception ();
+		$matches = array ();
+		preg_match ("/^R(\d+)C(\d+)$/", $cell_id, $matches);
 		
-		$query->setMaxRow($row)->setMinRow($row)->setMaxCol($col)->setMinCol($col);
+		$query->setMaxRow($matches[1])->setMinRow($matches[1])->setMaxCol($matches[2])->setMinCol($matches[2]);
 		
 		return $this->getFeed ($query->getQueryUrl());
 	}
