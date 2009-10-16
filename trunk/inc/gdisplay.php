@@ -339,7 +339,7 @@ class GDisplay {
 				float:left;
 				margin:10px 0;
 				min-height:110px;
-				width:160px;
+				min-width:160px;
 				text-align:center;
 			}
 			
@@ -349,15 +349,13 @@ class GDisplay {
 				line-height:1.3em;
 			}
 			
-			div#gdocs_helper .inside img{
+			img#gdocs_helper_ajax{
 				border: 0 none;
 			}
-			div#gdocs_helper h3 a{
-				float: right;
-			}
-			div#gdocs_helper h3 small{
-				float: right;
-				padding-right: 10px;
+			
+			.gdocs_head {
+				float:right;
+				margin-right:3px;
 			}
 			
 			.gdocs_error {
@@ -393,14 +391,20 @@ class GDisplay {
 			}
 		</style>
 		<div id='gdocs_helper' class='postbox open'>
-			<h3><a href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/img/ajax-refresh.png" ?>' /></a>Google Documents/Spreadsheets <small><code id='count'><span><?php echo $doc_count ?></span> documents | <span><?php echo (sizeof($results) - $doc_count) ?></span> worksheets</code></small></h3>			
+			<h3>
+				<a class='gdocs_head' href="#" onclick="javascript: GDocs.updateList(); return false;"><img id='gdocs_helper_ajax' src='<?php echo GDOCS_ADDRESS . "/inc/img/ajax-refresh.png" ?>' /></a>
+				Google Documents/Spreadsheets
+				<small class='gdocs_head'>
+					<code id='gdocs_count'><span><?php echo $doc_count ?></span> documents | <span><?php echo (sizeof($results) - $doc_count) ?></span> worksheets</code>
+				</small>
+				</h3>			
 			<div class='inside'>
 				<noscript><div class='gdocs_error' id='gdocs_js_error' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("Enable Javascript to use this panel.") ?></strong></p></div></noscript>
 				<?php
 				if ($results) echo $html; 
 				else {
 				?>
-				<div class='gdocs_error' id='message' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The plugin was unable to connect to the database. Refresh this box to see the list of documents and spreadsheets available.") ?></strong></p></div>
+				<div class='gdocs_error' id='gdocs_db_error' style='background-color: rgb(255, 170, 150);'><p><strong><?php _e("The plugin was unable to connect to the database. Refresh this box to see the list of documents and spreadsheets available.") ?></strong></p></div>
 				<?php } ?>
 			</div>
 			<div style="clear:both"></div>
@@ -562,6 +566,7 @@ class GDisplay {
 	 * Formats contents of spreadsheet cell for display
 	 */
 	public static function printCell (Zend_Gdata_Feed $feed){
+		if (is_null($feed[0])) throw new Exception ();
 		$entry = new Zend_Gdata_Spreadsheets_CellEntry ($feed[0]->getDOM());
 		return $entry->getCell()->getText() . "</span>";
 	}

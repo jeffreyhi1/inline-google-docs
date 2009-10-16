@@ -22,8 +22,14 @@ After you have installed the plugin, go to the **Write Page** or **Write Post** 
 or
 
 	[gdocs st_id='<spreadsheet-id>' wt_id='<worksheet-id>' type='spreadsheet']
+	
+or
+
+	[gdocs st_id='<spreadsheet-id>' wt_id='<worksheet-id>' cell_id='<cell-id>' type='cell']
 
 Replace `<doc-id>`, `<spreadsheet-id>`, and `<worksheet-id>` with the ID of the document or worksheet that you wish to embed. The ID's are available at the plugin's configuration page. Don't forget to enclose them in quotes.
+
+When embedding a single cell, specify the coordinates of the cell in the worksheet as R<row number>C<column number, such as R6C4 for the cell in the sixth row and fourth column of the worksheet. 
 
 #### Post Helper ####
 As of v0.5, you may embed a document or spreadsheet by simply clicking on its link in the **Google Documents/Spreadsheets** panel at the bottom of the page. This may be the preferred method as it relieves you of the technical task of typing the shortcode. Just place your caret where you want your document to appear and click on the title of your chosen document in the panel. This works in both Visual and HTML modes.

@@ -76,6 +76,7 @@ require_once ('gdb.php');
 require_once ('gdisplay.php');
 require_once ('gfeed.php');
 require_once ('gelement.php');
+require_once (GDOCS_PATH . "/ajax-functions.php");
 
 /**
  * Shortcode handler
@@ -229,6 +230,7 @@ add_action ('admin_menu', 'gdocs_options');
 add_action ('admin_init', 'gdocs_admin');
 add_action ('edit_form_advanced', 'gdocs_helper');
 add_action ('edit_page_form', 'gdocs_helper');
+add_action ('wp_ajax_gdocs_ajax_handler', 'gdocs_ajax_handler');
 
 // add shortcode
 add_shortcode ('gdocs', 'gdocs_display');
